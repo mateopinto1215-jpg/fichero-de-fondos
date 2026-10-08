@@ -1,18 +1,15 @@
 name: Actualizar fondos y publicar
 
 on:
-  # Programación pausada: CAFCI bloquea las IPs de GitHub (CloudFront 403). Ver README.
-  # schedule:
-    # Martes a sábado 02:15 UTC = lunes a viernes 23:15 en Buenos Aires (CAFCI publica a la noche)
-    # - cron: "15 2 * * 2-6"
-    # Repaso a la mañana (09:15 Buenos Aires) por si CAFCI publicó tarde
-    # - cron: "15 12 * * 2-6"
+  schedule:
+    # Lunes a viernes 15:15 y 21:15 en Buenos Aires (18:15 y 00:15 UTC).
+    # ArgentinaDatos actualiza los FCI a media tarde con los valores del día hábil anterior.
+    - cron: "15 18 * * 1-5"
+    - cron: "15 0 * * 2-6"
   workflow_dispatch:
-    inputs:
-      limite:
-        description: "Procesar solo N clases (0 = todas). Útil para pruebas."
-        required: false
-        default: "0"
+  push:
+    branches: [main]
+    paths: ["site/**", "scripts/**", ".github/workflows/**"]
 
 permissions:
   contents: write
@@ -41,8 +38,8 @@ jobs:
       - name: Probar el lector de fichas
         run: python scripts/test_parser.py
 
-      - name: Bajar datos de CAFCI
-        run: python scripts/cafci.py --limit "${{ github.event.inputs.limite || '0' }}"
+      - name: Bajar datos (ArgentinaDatos, fuente CAFCI/CNV)
+        run: python scripts/argentinadatos.py
 
       - name: Guardar historial de cuotapartes
         run: |

@@ -565,14 +565,14 @@ function masthead(){
   if (META.maxF){ const [y,m,dd]=META.maxF.split('-'); fecha = `${+dd} ${MESES[+m-1]}`; }
   $('#mastMeta').innerHTML = `<div><b class="num">${nf0.format(f)}</b><span>Fondos</span></div><div><b class="num">${nf0.format(conDatos)}</b><span>Clases con datos</span></div><div><b>${g}</b><span>Gestoras</span></div><div><b>${fecha}</b><span>Valores al</span></div>`;
   const gen = META.generado ? new Date(META.generado) : null;
-  $('#foot').innerHTML = `Fuente: <b>CAFCI</b> — Cámara Argentina de Fondos Comunes de Inversión (estadisticas.cafci.org.ar).${gen?` Última actualización: ${gen.toLocaleString('es-AR',{dateStyle:'long',timeStyle:'short'})}.`:''}`;
+  $('#foot').innerHTML = `Fuente: <b>CAFCI</b> (Cámara Argentina de Fondos Comunes de Inversión) y <b>CNV</b>, a través de <a href="https://argentinadatos.com" target="_blank" rel="noopener">ArgentinaDatos</a>. Cada fondo enlaza a su ficha oficial en CAFCI.${gen?` Última actualización: ${gen.toLocaleString('es-AR',{dateStyle:'long',timeStyle:'short'})}.`:''}`;
 }
 async function init(){
   try {
     const r = await fetch('data/fondos-ar.json', {cache:'no-cache'});
     if (!r.ok) throw new Error('HTTP '+r.status);
     const j = await r.json();
-    META = {generado:j.generado, usd_ars:j.usd_ars};
+    META = {generado:j.generado, usd_ars:j.usd_ars, fuente:j.fuente};
     DATA = derive(j.clases||[], j.usd_ars);
   } catch(e){
     $('#results').innerHTML = `<div class="tablebox"><div class="empty"><b>No pudimos cargar los datos</b>Probá recargar la página en unos minutos.</div></div>`;
