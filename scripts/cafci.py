@@ -55,7 +55,7 @@ def get(url: str, **kw) -> requests.Response:
             r = _session.get(url, timeout=40, **kw)
             if r.status_code == 200:
                 return r
-            ultimo = f"HTTP {r.status_code}"
+            ultimo = f"HTTP {r.status_code} ({r.headers.get('server','?')}): {r.text[:120]!r}"
             if r.status_code in (404, 410):
                 break
         except requests.RequestException as e:
@@ -364,6 +364,7 @@ def main() -> int:
     # Si una corrida falla de forma masiva (CAFCI caído, bloqueo), no pisamos los datos buenos.
     ok = [r for r in resultado if not r.get("err")]
     if len(ok) < 0.5 * len(filas):
+        print(f"::error title=Conector CAFCI::Solo {len(ok)} de {len(filas)} fichas OK. Ejemplo: {(errores or ['-'])[0][:300]}")
         print(f"ERROR: solo {len(ok)} de {len(filas)} fichas OK. No se actualizan los datos.", file=sys.stderr)
         for e in errores[:20]:
             print("  ", e, file=sys.stderr)
@@ -396,4 +397,9 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as e:  # noqa: BLE001
+        # En GitHub Actions, "::error::" se muestra como anotación de la corrida
+        print(f"::error title=Conector CAFCI::{type(e).__name__}: {str(e)[:400]}")
+        raise
