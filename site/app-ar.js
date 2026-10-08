@@ -209,7 +209,7 @@ function renderFacets(){
     <p class="sub">Los fondos en pesos se convierten al dólar oficial${META.usd_ars?` (${nf0.format(META.usd_ars)} $/US$)`:''}.</p></div>`;
   const nP = DATA.filter(d=>d.pend).length, nC = DATA.filter(d=>!d.susc).length;
   h += `<div class="fgroup"><h3>Disponibilidad</h3>
-    <label class="opt"><input type="checkbox" id="hideP"${S.hideP?' checked':''}><span class="lbl">Ocultar clases sin valores recientes (fondos liquidados o sin informar)</span><span class="ct">${nP}</span></label>
+    <label class="opt"><input type="checkbox" id="hideP"${S.hideP?' checked':''}><span class="lbl">Ocultar clases sin actividad (sin patrimonio, liquidadas o sin datos recientes)</span><span class="ct">${nP}</span></label>
     <label class="opt"><input type="checkbox" id="onlySusc"${S.onlySusc?' checked':''}><span class="lbl">Solo abiertas a suscripción</span><span class="ct">${DATA.length-nC}</span></label></div>`;
   const focusId = document.activeElement && document.activeElement.id;
   const caret = focusId && document.activeElement.selectionStart;
@@ -490,7 +490,7 @@ function openFund(id, keep){
   $('#drawer').innerHTML = `
     <div class="d-head">
       <div class="d-top"><div><div class="d-g">${esc(d.g)}</div><h2>${esc(d.n)}</h2></div><button class="x" id="dClose" aria-label="Cerrar ficha">✕</button></div>
-      <div class="d-pills">${typePill(d)}<span class="pill t-${d.ccyK.toLowerCase()}">${esc(d.ccyL)}</span><span class="pill t-ot">${esc(d.hz)}</span><span class="pill t-ot">Rescate ${esc(d.liqL)}</span>${d.tm?`<span class="pill t-ot">${esc(d.tm)}</span>`:''}${!d.susc?'<span class="pill" style="background:var(--warn-soft);color:var(--warn)">Cerrado a suscripción</span>':''}${d.pend?`<span class="pill" style="background:var(--warn-soft);color:var(--warn)">${d.f?'Sin valores recientes':'Sin valores publicados'}</span>`:''}</div>
+      <div class="d-pills">${typePill(d)}<span class="pill t-${d.ccyK.toLowerCase()}">${esc(d.ccyL)}</span><span class="pill t-ot">${esc(d.hz)}</span><span class="pill t-ot">Rescate ${esc(d.liqL)}</span>${d.tm?`<span class="pill t-ot">${esc(d.tm)}</span>`:''}${!d.susc?'<span class="pill" style="background:var(--warn-soft);color:var(--warn)">Cerrado a suscripción</span>':''}${d.pend?`<span class="pill" style="background:var(--warn-soft);color:var(--warn)">${d.empty?'Clase sin patrimonio ni movimiento':d.f?'Sin valores recientes':'Sin valores publicados'}</span>`:''}</div>
     </div>
     <div class="d-body">
       <div class="d-sec"><div class="kpis">
@@ -559,11 +559,12 @@ let lastW = window.innerWidth, rT; addEventListener('resize', ()=>{ const w=wind
 
 /* ---------------------------------------------------------------- arranque */
 function masthead(){
-  const g=new Set(DATA.map(d=>d.g)).size, f=new Set(DATA.map(d=>d.fid)).size;
-  const conDatos = DATA.filter(d=>!d.pend).length;
+  const act = DATA.filter(d=>!d.pend);
+  const g=new Set(act.map(d=>d.g)).size, f=new Set(act.map(d=>d.fid)).size;
+  const conDatos = act.length;
   let fecha = '—';
   if (META.maxF){ const [y,m,dd]=META.maxF.split('-'); fecha = `${+dd} ${MESES[+m-1]}`; }
-  $('#mastMeta').innerHTML = `<div><b class="num">${nf0.format(f)}</b><span>Fondos</span></div><div><b class="num">${nf0.format(conDatos)}</b><span>Clases con datos</span></div><div><b>${g}</b><span>Gestoras</span></div><div><b>${fecha}</b><span>Valores al</span></div>`;
+  $('#mastMeta').innerHTML = `<div><b class="num">${nf0.format(f)}</b><span>Fondos</span></div><div><b class="num">${nf0.format(conDatos)}</b><span>Clases activas</span></div><div><b>${g}</b><span>Gestoras</span></div><div><b>${fecha}</b><span>Valores al</span></div>`;
   const gen = META.generado ? new Date(META.generado) : null;
   $('#foot').innerHTML = `Fuente: <b>CAFCI</b> (Cámara Argentina de Fondos Comunes de Inversión) y <b>CNV</b>, a través de <a href="https://argentinadatos.com" target="_blank" rel="noopener">ArgentinaDatos</a>. Cada fondo enlaza a su ficha oficial en CAFCI.${gen?` Última actualización: ${gen.toLocaleString('es-AR',{dateStyle:'long',timeStyle:'short'})}.`:''}`;
 }
@@ -581,7 +582,12 @@ async function init(){
   const fs = DATA.map(d=>d.f).filter(Boolean).sort(); META.maxF = fs[fs.length-1];
   // Clases sin valores recientes (fondos liquidados o que dejaron de informar): se ocultan por defecto
   const lim = new Date(META.maxF); lim.setDate(lim.getDate()-15);
-  DATA.forEach(d=>{ d.stale = !d.f || new Date(d.f) < lim; if (d.stale) d.pend = true; });
+  DATA.forEach(d=>{
+    d.stale = !d.f || new Date(d.f) < lim;
+    // Clases vacías: sin patrimonio, o con la cuotaparte quieta hace 90 días (nadie invierte en ellas)
+    d.empty = !d.stale && (d.pat===0 || (d.r7===0 && d.r1m===0 && d.r3m===0));
+    if (d.stale || d.empty) d.pend = true;
+  });
   DATA.forEach(d=>{ BY_CID.set(d.cid,d); (BY_FUND.get(d.fid)||BY_FUND.set(d.fid,[]).get(d.fid)).push(d); });
   computePeers();
   masthead();
