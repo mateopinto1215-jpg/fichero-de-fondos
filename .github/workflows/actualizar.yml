@@ -1,20 +1,18 @@
 name: Actualizar fondos y publicar
 
 on:
-  schedule:
+  # Programación pausada: CAFCI bloquea las IPs de GitHub (CloudFront 403). Ver README.
+  # schedule:
     # Martes a sábado 02:15 UTC = lunes a viernes 23:15 en Buenos Aires (CAFCI publica a la noche)
-    - cron: "15 2 * * 2-6"
+    # - cron: "15 2 * * 2-6"
     # Repaso a la mañana (09:15 Buenos Aires) por si CAFCI publicó tarde
-    - cron: "15 12 * * 2-6"
+    # - cron: "15 12 * * 2-6"
   workflow_dispatch:
     inputs:
       limite:
         description: "Procesar solo N clases (0 = todas). Útil para pruebas."
         required: false
         default: "0"
-  push:
-    branches: [main]
-    paths: ["site/**", "scripts/**", ".github/workflows/**"]
 
 permissions:
   contents: write
