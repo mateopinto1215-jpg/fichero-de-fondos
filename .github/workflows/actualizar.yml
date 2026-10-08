@@ -54,6 +54,9 @@ jobs:
             git push
           fi
 
+      - name: Versionar archivos de la web (evita que el navegador muestre una versión vieja)
+        run: sed -i "s/__V__/${GITHUB_RUN_NUMBER}/g" site/index.html
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
