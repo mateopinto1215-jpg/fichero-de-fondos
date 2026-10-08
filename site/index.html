@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fichero de Fondos · Argentina</title>
+<meta name="description" content="Fondos comunes de inversión argentinos: rendimientos, costos, cartera y ficha oficial de cada clase, con datos de CAFCI actualizados todos los días.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <div class="mast-in">
+      <div class="brand">
+        <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true"><rect x="3" y="11" width="36" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--ink)"/><path d="M8 11V6.5a2 2 0 0 1 2-2h12l3 3h7a2 2 0 0 1 2 2V11" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--ink-3)"/><rect x="16" y="20" width="10" height="4" rx="2" fill="var(--brass)"/><path d="M9 31h24" stroke="var(--line-2)" stroke-width="1.6"/></svg>
+        <div>
+          <h1>Fichero de Fondos</h1>
+          <p>Fondos comunes de inversión, con datos oficiales y actualizados todos los días</p>
+        </div>
+      </div>
+      <div class="mast-meta" id="mastMeta"></div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="false" disabled title="Sección en preparación para esta versión">Internacional <span class="soon">Próximamente</span></button>
+      <button class="tab" role="tab" aria-selected="true">Argentina <span class="nd tabsub" style="font-weight:400">· FCI registrados en CNV</span></button>
+    </div>
+  </div>
+</header>
+<div class="disc"><div class="wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>Datos de la Cámara Argentina de Fondos Comunes de Inversión (CAFCI), actualizados automáticamente cada día hábil. Información de carácter informativo; no constituye una recomendación de inversión. Rendimientos pasados no garantizan rendimientos futuros.</span></div></div>
+
+<div class="wrap layout">
+  <aside class="filters" id="filters" aria-label="Filtros">
+    <div class="f-head">
+      <h2>Filtros</h2>
+      <div style="display:flex;gap:12px;align-items:center">
+        <button class="linkbtn" id="clearAll">Limpiar todo</button>
+        <button class="x f-close" id="fClose" aria-label="Cerrar filtros">✕</button>
+      </div>
+    </div>
+    <div id="gestBox"></div>
+    <div id="listsBox" class="lists"></div>
+    <div id="facetBox"></div>
+  </aside>
+
+  <main class="main">
+    <div class="toolbar">
+      <div class="search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Buscar por fondo, clase, gestora, ticker o activo en cartera…" autocomplete="off" aria-label="Buscar fondos">
+        <kbd>/</kbd>
+      </div>
+      <button class="ctl btn-filters" id="fOpen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>Filtros <span class="badge" id="fCount" hidden>0</span></button>
+      <div class="ctl"><label for="sort">Ordenar</label>
+        <select id="sort">
+          <option value="n:asc">Nombre (A–Z)</option>
+          <option value="g:asc">Gestora (A–Z)</option>
+          <option value="rd:desc">Rendimiento del día ↓</option>
+          <option value="r1m:desc">Rendimiento 1 mes ↓</option>
+          <option value="rytd:desc">Rendimiento en el año ↓</option>
+          <option value="r12:desc">Rendimiento 12 meses ↓</option>
+          <option value="cost:asc">Menor costo</option>
+          <option value="au:desc">Mayor patrimonio</option>
+          <option value="p12:desc">Mejor vs. pares (12 meses)</option>
+          <option value="liq:asc">Rescate más rápido</option>
+          <option value="f:desc">Dato más reciente</option>
+        </select>
+      </div>
+      <div class="seg" role="group" aria-label="Vista">
+        <button id="vTable" aria-pressed="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Tabla</button>
+        <button id="vCards" aria-pressed="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1"/></svg>Fichas</button>
+        <button id="vExplore" aria-pressed="false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V4M4 20h16"/><circle cx="9" cy="14" r="1.6"/><circle cx="13" cy="9" r="1.6"/><circle cx="17" cy="12" r="1.6"/></svg>Explorar</button>
+      </div>
+    </div>
+    <div id="listBar"></div>
+    <div class="chips" id="chips"></div>
+    <div class="summary" id="summary"></div>
+    <div id="mixNote"></div>
+    <div id="results"><div class="loading">Cargando fondos…</div></div>
+    <section class="guide" aria-label="Guía rápida">
+      <div><h4>Rendimientos</h4><p>Mostramos el rendimiento <b>directo</b> de cada período: cuánto creció la cuotaparte. CAFCI los publica como TNA (tasa nominal anual); la verás al pasar el cursor y en la ficha de cada fondo.</p></div>
+      <div><h4>Costo anual</h4><p>Suma de los honorarios de la sociedad gerente, de la depositaria y de los gastos ordinarios, como % anual del patrimonio. Ya está descontado del valor de la cuotaparte. Las comisiones de ingreso y rescate se cobran aparte y figuran en la ficha.</p></div>
+      <div><h4>Plazo de liquidación</h4><p>Cuánto tarda en acreditarse el dinero al rescatar. CI es contado inmediato (en el día); 24 hs, 48 hs o 72 hs son días hábiles.</p></div>
+      <div><h4>Clases</h4><p>Un fondo tiene varias clases (A, B, C…) según el tipo de inversor o el monto mínimo, con costos y rendimientos distintos. Cada fila es una clase; en la ficha ves las demás clases del mismo fondo.</p></div>
+      <div><h4>Frente a sus pares</h4><p>Cada clase se compara con las de su mismo tipo de fondo y moneda. «Mejor que el 70%» significa que supera a 7 de cada 10 comparables en ese dato. En el costo, mejor significa más barato.</p></div>
+      <div><h4>Ficha oficial</h4><p>El botón «Ficha oficial en CAFCI» abre la ficha del fondo en la Cámara, con su composición de cartera, honorarios y la opción de imprimirla o guardarla en PDF.</p></div>
+      <div><h4>Mis listas</h4><p>Marcá fondos con la estrella o armá listas propias desde la ficha. Se guardan en este navegador y solo las ves vos.</p></div>
+    </section>
+    <p class="foot" id="foot"></p>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Ficha del fondo" aria-hidden="true"></aside>
+
+<div class="tray" id="tray" aria-live="polite">
+  <div class="tl" id="trayLbl"></div>
+  <div class="tn" id="trayNames"></div>
+  <button class="clr" id="trayClr">Quitar</button>
+  <button class="go" id="trayGo">Comparar</button>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="mbox" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="mhead"><h2 id="mTitle">Comparar fondos</h2><button class="x" id="mClose" aria-label="Cerrar">✕</button></div>
+    <div class="mbody" id="mBody"></div>
+  </div>
+</div>
+
+<script src="app-ar.js"></script>
+</body>
+</html>

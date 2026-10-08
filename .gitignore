@@ -1,0 +1,5 @@
+# Los datos del día se generan en cada corrida y se publican directo en la web (no se versionan)
+site/data/fondos-ar.json
+__pycache__/
+*.pyc
+.venv/
