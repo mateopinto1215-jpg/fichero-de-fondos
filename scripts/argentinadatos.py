@@ -17,7 +17,7 @@ import json
 import re
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import requests
@@ -122,7 +122,12 @@ def main() -> int:
         print(f"::error title=Conector ArgentinaDatos::Solo {len(con_datos)} clases con datos; no se actualiza la web.")
         return 1
 
-    nuevas = guardar_historial(con_datos)
+    # Solo guardamos historial de clases con datos recientes (hay clases de fondos liquidados
+    # cuyo último valor es de hace años).
+    max_f = max(x["f"] for x in con_datos if x["f"])
+    limite = (datetime.fromisoformat(max_f) - timedelta(days=10)).date().isoformat()
+    recientes = [x for x in con_datos if x["f"] and x["f"] >= limite]
+    nuevas = guardar_historial(recientes)
     filas.sort(key=lambda x: (x["n"] or "").lower())
     payload = {
         "generado": datetime.now().astimezone().isoformat(timespec="minutes"),
@@ -138,7 +143,7 @@ def main() -> int:
     RUN_JSON.write_text(json.dumps({
         "fecha": payload["generado"], "fuente": payload["fuente"],
         "actualizacion_fuente": payload["actualizacion_fuente"],
-        "clases": len(filas), "con_datos": len(con_datos),
+        "clases": len(filas), "con_datos": len(con_datos), "con_datos_recientes": len(recientes),
         "historial_filas_nuevas": nuevas, "segundos": round(time.time() - t0),
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"::notice title=ArgentinaDatos::{len(filas)} clases, {len(con_datos)} con datos, fuente al {j.get('fechaActualizacion')}")

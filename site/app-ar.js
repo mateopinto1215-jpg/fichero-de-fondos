@@ -209,7 +209,7 @@ function renderFacets(){
     <p class="sub">Los fondos en pesos se convierten al dólar oficial${META.usd_ars?` (${nf0.format(META.usd_ars)} $/US$)`:''}.</p></div>`;
   const nP = DATA.filter(d=>d.pend).length, nC = DATA.filter(d=>!d.susc).length;
   h += `<div class="fgroup"><h3>Disponibilidad</h3>
-    <label class="opt"><input type="checkbox" id="hideP"${S.hideP?' checked':''}><span class="lbl">Ocultar clases sin valores publicados</span><span class="ct">${nP}</span></label>
+    <label class="opt"><input type="checkbox" id="hideP"${S.hideP?' checked':''}><span class="lbl">Ocultar clases sin valores recientes (fondos liquidados o sin informar)</span><span class="ct">${nP}</span></label>
     <label class="opt"><input type="checkbox" id="onlySusc"${S.onlySusc?' checked':''}><span class="lbl">Solo abiertas a suscripción</span><span class="ct">${DATA.length-nC}</span></label></div>`;
   const focusId = document.activeElement && document.activeElement.id;
   const caret = focusId && document.activeElement.selectionStart;
@@ -490,7 +490,7 @@ function openFund(id, keep){
   $('#drawer').innerHTML = `
     <div class="d-head">
       <div class="d-top"><div><div class="d-g">${esc(d.g)}</div><h2>${esc(d.n)}</h2></div><button class="x" id="dClose" aria-label="Cerrar ficha">✕</button></div>
-      <div class="d-pills">${typePill(d)}<span class="pill t-${d.ccyK.toLowerCase()}">${esc(d.ccyL)}</span><span class="pill t-ot">${esc(d.hz)}</span><span class="pill t-ot">Rescate ${esc(d.liqL)}</span>${d.tm?`<span class="pill t-ot">${esc(d.tm)}</span>`:''}${!d.susc?'<span class="pill" style="background:var(--warn-soft);color:var(--warn)">Cerrado a suscripción</span>':''}${d.pend?'<span class="pill" style="background:var(--warn-soft);color:var(--warn)">Sin valores publicados</span>':''}</div>
+      <div class="d-pills">${typePill(d)}<span class="pill t-${d.ccyK.toLowerCase()}">${esc(d.ccyL)}</span><span class="pill t-ot">${esc(d.hz)}</span><span class="pill t-ot">Rescate ${esc(d.liqL)}</span>${d.tm?`<span class="pill t-ot">${esc(d.tm)}</span>`:''}${!d.susc?'<span class="pill" style="background:var(--warn-soft);color:var(--warn)">Cerrado a suscripción</span>':''}${d.pend?`<span class="pill" style="background:var(--warn-soft);color:var(--warn)">${d.f?'Sin valores recientes':'Sin valores publicados'}</span>`:''}</div>
     </div>
     <div class="d-body">
       <div class="d-sec"><div class="kpis">
@@ -579,6 +579,9 @@ async function init(){
     console.error(e); return;
   }
   const fs = DATA.map(d=>d.f).filter(Boolean).sort(); META.maxF = fs[fs.length-1];
+  // Clases sin valores recientes (fondos liquidados o que dejaron de informar): se ocultan por defecto
+  const lim = new Date(META.maxF); lim.setDate(lim.getDate()-15);
+  DATA.forEach(d=>{ d.stale = !d.f || new Date(d.f) < lim; if (d.stale) d.pend = true; });
   DATA.forEach(d=>{ BY_CID.set(d.cid,d); (BY_FUND.get(d.fid)||BY_FUND.set(d.fid,[]).get(d.fid)).push(d); });
   computePeers();
   masthead();
