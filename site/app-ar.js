@@ -39,13 +39,24 @@ function derive(raw, usdArs){
     d.au = d.pat==null ? null : (usd ? d.pat/1e6 : (usdArs ? d.pat/usdArs/1e6 : null));
     d.pend = d.vcp==null;
     d.califTop = d.calif.length ? d.calif[0][1] : '';
+    d.clsK = claseDe(d.n);
     d.idx = norm([d.n,d.fondo,d.g,d.t,d.tm,d.hz,d.geo,d.ccyL,d.bbg,d.isin,d.cnv,d.dep,d.cart.map(x=>x[0]).join(' ')].join(' '));
     return d;
   });
 }
 
+// "Fima Premium - Clase B" -> "Clase B"; sin clase o "Clase Única" -> "Única"
+function claseDe(n){
+  const m = String(n||'').match(/\bClase\s+([^\s\-–—,()]+)/i);
+  if (!m) return 'Única';
+  const t = m[1];
+  if (/^[uú]nica$/i.test(t)) return 'Única';
+  return /^[A-Za-z0-9]{1,3}$/.test(t) ? 'Clase '+t.toUpperCase() : 'Otras';
+}
+const clsOrd = (a,b) => { const r = x => x==='Única'?2 : x==='Otras'?3 : 1; return r(a)-r(b) || a.localeCompare(b,'es',{numeric:true}); };
+
 /* ---------------------------------------------------------------- estado */
-const DEF = {q:'',t:[],ccy:[],hz:[],liq:[],geo:[],g:[],costMax:5,r12Min:null,auMin:0,hideP:true,onlySusc:false,sort:'au:desc',view:'table',list:null,xr:'r12'};
+const DEF = {q:'',t:[],ccy:[],cls:[],hz:[],liq:[],geo:[],g:[],costMax:5,r12Min:null,auMin:0,hideP:true,onlySusc:false,sort:'au:desc',view:'table',list:null,xr:'r12'};
 let S = structuredClone(DEF);
 try { const saved = JSON.parse(localStorage.getItem('fichero-ar-v1')||'null'); if (saved) S = Object.assign(structuredClone(DEF), saved); } catch(e){}
 const save = () => { try { localStorage.setItem('fichero-ar-v1', JSON.stringify(S)); } catch(e){} };
@@ -67,13 +78,38 @@ function afterListChange(d){
   if (openId===d.id) openFund(d.id,true);
 }
 const starBtn = d => `<button class="star${inList('fav',d)?' on':''}" data-star="${d.id}" aria-pressed="${inList('fav',d)}" aria-label="Guardar en Favoritos" title="Guardar en Favoritos"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>`;
+/* Secciones desplegables del panel de filtros (estado guardado en este navegador) */
+let ACC = {};
+try { ACC = JSON.parse(localStorage.getItem('fichero-ar-acc')||'{}') || {}; } catch(e){ ACC = {}; }
+const saveAcc = () => { try { localStorage.setItem('fichero-ar-acc', JSON.stringify(ACC)); } catch(e){} };
+const CHEV = '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+function grp(key, title, body, nSel){
+  const open = ACC[key] ?? (nSel>0);
+  return `<div class="fgroup acc${open?' open':''}" data-g="${key}">
+    <button type="button" class="acc-h" data-acc="${key}" aria-expanded="${open}" aria-controls="acc-${key}">
+      <span class="acc-t">${title}</span><span class="acc-m">${nSel?`<span class="acc-n" title="${nSel} filtro${nSel>1?'s':''} activo${nSel>1?'s':''}">${nSel}</span>`:''}${CHEV}</span>
+    </button>
+    <div class="acc-b" id="acc-${key}"${open?'':' hidden'}>${body}</div></div>`;
+}
+function setAcc(g, open){
+  g.classList.toggle('open', open);
+  g.querySelector('.acc-h').setAttribute('aria-expanded', open);
+  g.querySelector('.acc-b').hidden = !open;
+  ACC[g.dataset.g] = open;
+}
+function syncAccAll(){
+  const b = $('#accAll'); if (!b) return;
+  const gs = [...document.querySelectorAll('#filters .acc')];
+  b.textContent = gs.length && gs.every(g=>g.classList.contains('open')) ? 'Cerrar todo' : 'Abrir todo';
+}
+
 let delArm = null;
 function renderLists(){
-  let h = `<div class="fgroup"><h3>Mis listas</h3>
-    <button class="lrow${!S.list?' on':''}" data-list=""><span class="lbl">Todos los fondos</span><span class="ct">${DATA.length}</span></button>`;
+  let h = `<button class="lrow${!S.list?' on':''}" data-list=""><span class="lbl">Todos los fondos</span><span class="ct">${DATA.length}</span></button>`;
   LISTS.forEach(l=>{ h += `<button class="lrow${S.list===l.id?' on':''}" data-list="${l.id}"><span class="lbl">${l.id==='fav'?'★ ':''}${esc(l.name)}</span><span class="ct">${l.keys.length}</span></button>`; });
-  h += `<div class="newlist"><input id="nlName" placeholder="Nombre de nueva lista" aria-label="Nombre de nueva lista" maxlength="40"><button id="nlAdd">Crear</button></div></div>`;
-  $('#listsBox').innerHTML = h;
+  h += `<div class="newlist"><input id="nlName" placeholder="Nombre de nueva lista" aria-label="Nombre de nueva lista" maxlength="40"><button id="nlAdd">Crear</button></div>`;
+  $('#listsBox').innerHTML = grp('fav', 'Favoritos', h, S.list?1:0);
+  syncAccAll();
   const bar = $('#listBar');
   const l = S.list && LISTS.find(x=>x.id===S.list);
   if (!l){ bar.innerHTML=''; if(S.list){S.list=null;} return; }
@@ -110,12 +146,13 @@ function computePeers(){
 
 /* ---------------------------------------------------------------- filtros */
 const FACETS = [
-  {k:'t', title:'Tipo de fondo', get:d=>d.t},
   {k:'ccy', title:'Moneda', get:d=>d.ccyL},
-  {k:'liq', title:'Plazo de liquidación', get:d=>d.liqL, order:(a,b)=>liqOrd(a)-liqOrd(b)},
-  {k:'hz', title:'Horizonte', get:d=>d.hz},
-  {k:'geo', title:'Región', get:d=>d.geo, limit:6},
   {k:'g', title:'Gestora', get:d=>d.g, search:true},
+  {k:'cls', title:'Clase', get:d=>d.clsK, order:(a,b)=>clsOrd(a,b), hint:'La letra la define cada fondo; en general separa tipos de inversor (minorista, institucional) o montos mínimos.'},
+  {k:'liq', title:'Plazo de liquidación', get:d=>d.liqL, order:(a,b)=>liqOrd(a)-liqOrd(b)},
+  {k:'t', title:'Tipo de fondo', get:d=>d.t},
+  {k:'geo', title:'Región', get:d=>d.geo},
+  {k:'hz', title:'Horizonte', get:d=>d.hz},
 ];
 const liqOrd = l => l==='CI'?0 : l==='s/d'?99 : parseInt(l)||50;
 
@@ -171,50 +208,52 @@ function sorted(list){
 
 /* ---------------------------------------------------------------- facetas */
 const facetState = {};
+function facetHtml(f){
+  const counts = new Map(), all = new Map();
+  DATA.forEach(d=>{ const v=f.get(d); if(v==null||v==='') return; all.set(v,(all.get(v)||0)+1); if(pass(d,f.k)) counts.set(v,(counts.get(v)||0)+1); });
+  let keys = [...all.keys()];
+  if (f.order) keys.sort(f.order);
+  else if (f.k==='g') keys.sort((a,b)=>a.localeCompare(b,'es'));
+  else keys.sort((a,b)=> (all.get(b)-all.get(a)) || a.localeCompare(b,'es'));
+  const fs = facetState[f.k] || (facetState[f.k]={open:false,q:''});
+  let list = keys;
+  if (f.search && fs.q) list = keys.filter(k=>norm(k).includes(norm(fs.q)));
+  const lim = f.limit && !fs.open ? f.limit : Infinity;
+  const vis = list.filter((k,i)=> i<lim || S[f.k].includes(k));
+  const sel = S[f.k].length;
+  let b = '';
+  if (f.search) b += `<input class="minisearch" id="ms-${f.k}" placeholder="Buscar gestora…" value="${esc(fs.q)}" aria-label="Buscar gestora">`;
+  b += `<div class="${f.search?'scrolllist':''}">`;
+  vis.forEach(k=>{
+    const c = counts.get(k)||0; const on = S[f.k].includes(k);
+    const lbl = f.k==='liq' && k==='CI' ? 'CI · en el día' : k;
+    b += `<label class="opt${!c&&!on?' zero':''}"><input type="checkbox" data-f="${f.k}" value="${esc(k)}"${on?' checked':''}><span class="lbl">${esc(lbl)}</span><span class="ct">${c}</span></label>`;
+  });
+  if (f.search && !vis.length) b += `<p class="sub">Ninguna gestora coincide.</p>`;
+  b += `</div>`;
+  if (f.limit && list.length>f.limit) b += `<button class="linkbtn" data-more="${f.k}" style="margin-top:4px">${fs.open?'Ver menos':'Ver las '+list.length}</button>`;
+  if (f.hint) b += `<p class="sub">${esc(f.hint)}</p>`;
+  if (sel) b += `<button class="linkbtn acc-clr" data-clr="${f.k}">Quitar ${sel===1?'el filtro':'los '+sel+' filtros'}</button>`;
+  return grp(f.k, f.title, b, sel);
+}
 function renderFacets(){
-  let h = '', hg = '';
-  for (const f of FACETS){
-    let out = '';
-    const counts = new Map(), all = new Map();
-    DATA.forEach(d=>{ const v=f.get(d); if(v==null||v==='') return; all.set(v,(all.get(v)||0)+1); if(pass(d,f.k)) counts.set(v,(counts.get(v)||0)+1); });
-    let keys = [...all.keys()];
-    if (f.order) keys.sort(f.order);
-    else if (f.k==='g') keys.sort((a,b)=>a.localeCompare(b,'es'));
-    else keys.sort((a,b)=> (all.get(b)-all.get(a)) || a.localeCompare(b,'es'));
-    const fs = facetState[f.k] || (facetState[f.k]={open:false,q:''});
-    let list = keys;
-    if (f.search && fs.q) list = keys.filter(k=>norm(k).includes(norm(fs.q)));
-    const lim = f.limit && !fs.open ? f.limit : Infinity;
-    const vis = list.filter((k,i)=> i<lim || S[f.k].includes(k));
-    const sel = S[f.k].length;
-    out += `<div class="fgroup"><h3><span>${f.title}</span>${sel?`<button class="linkbtn" data-clr="${f.k}" style="font-size:12px;text-transform:none;letter-spacing:0">Quitar (${sel})</button>`:''}</h3>`;
-    if (f.search) out += `<input class="minisearch" id="ms-${f.k}" placeholder="Buscar gestora…" value="${esc(fs.q)}" aria-label="Buscar gestora">`;
-    out += `<div class="${f.search?'scrolllist':''}">`;
-    vis.forEach(k=>{
-      const c = counts.get(k)||0; const on = S[f.k].includes(k);
-      const lbl = f.k==='liq' && k==='CI' ? 'CI · en el día' : k;
-      out += `<label class="opt${!c&&!on?' zero':''}"><input type="checkbox" data-f="${f.k}" value="${esc(k)}"${on?' checked':''}><span class="lbl">${esc(lbl)}</span><span class="ct">${c}</span></label>`;
-    });
-    out += `</div>`;
-    if (f.limit && list.length>f.limit) out += `<button class="linkbtn" data-more="${f.k}" style="margin-top:4px">${fs.open?'Ver menos':'Ver las '+list.length}</button>`;
-    out += `</div>`;
-    if (f.k==='g') hg = out; else h += out;
-  }
-  h += `<div class="fgroup"><h3>Costo anual</h3><div class="range"><div class="rv"><span>Máximo</span><b id="costV">${S.costMax>=5?'Sin límite':nf.format(S.costMax)+'%'}</b></div><input type="range" id="costMax" min="0.25" max="5" step="0.25" value="${S.costMax}" aria-label="Costo máximo"></div></div>`;
-  h += `<div class="fgroup"><h3>Rendimiento mínimo</h3>
-    <div class="range"><div class="rv"><span>Últimos 12 meses</span><b id="r12V">${S.r12Min==null?'Cualquiera':'≥ '+nf0.format(S.r12Min)+'%'}</b></div><input type="range" id="r12Min" min="-20" max="80" step="1" value="${S.r12Min??-20}" aria-label="Rendimiento 12 meses mínimo"></div>
-    <p class="sub">Ojo: los fondos en pesos y en dólares no son comparables entre sí. Conviene filtrar por moneda.</p></div>`;
-  h += `<div class="fgroup"><h3>Patrimonio de la clase</h3><select class="fsel" id="auMin" aria-label="Patrimonio mínimo">
-    ${[[0,'Cualquier tamaño'],[1,'Más de US$ 1 M'],[10,'Más de US$ 10 M'],[50,'Más de US$ 50 M'],[100,'Más de US$ 100 M'],[500,'Más de US$ 500 M']].map(([v,l])=>`<option value="${v}"${S.auMin==v?' selected':''}>${l}</option>`).join('')}</select>
-    <p class="sub">Los fondos en pesos se convierten al dólar oficial${META.usd_ars?` (${nf0.format(META.usd_ars)} $/US$)`:''}.</p></div>`;
+  const F = Object.fromEntries(FACETS.map(f=>[f.k,f]));
   const nP = DATA.filter(d=>d.pend).length, nC = DATA.filter(d=>!d.susc).length;
-  h += `<div class="fgroup"><h3>Disponibilidad</h3>
-    <label class="opt"><input type="checkbox" id="hideP"${S.hideP?' checked':''}><span class="lbl">Ocultar clases sin actividad (sin patrimonio, liquidadas o sin datos recientes)</span><span class="ct">${nP}</span></label>
-    <label class="opt"><input type="checkbox" id="onlySusc"${S.onlySusc?' checked':''}><span class="lbl">Solo abiertas a suscripción</span><span class="ct">${DATA.length-nC}</span></label></div>`;
+  const P = {
+    aum: grp('aum', 'Patrimonio', `<select class="fsel" id="auMin" aria-label="Patrimonio mínimo de la clase">
+      ${[[0,'Cualquier tamaño'],[1,'Más de US$ 1 M'],[10,'Más de US$ 10 M'],[50,'Más de US$ 50 M'],[100,'Más de US$ 100 M'],[500,'Más de US$ 500 M']].map(([v,l])=>`<option value="${v}"${S.auMin==v?' selected':''}>${l}</option>`).join('')}</select>
+      <p class="sub">Patrimonio de la clase. Los fondos en pesos se convierten al dólar oficial${META.usd_ars?` (${nf0.format(META.usd_ars)} $/US$)`:''}.</p>`, S.auMin?1:0),
+    rend: grp('rend', 'Rendimiento', `<div class="range"><div class="rv"><span>Mínimo, últimos 12 meses</span><b id="r12V">${S.r12Min==null?'Cualquiera':'≥ '+nf0.format(S.r12Min)+'%'}</b></div><input type="range" id="r12Min" min="-20" max="80" step="1" value="${S.r12Min??-20}" aria-label="Rendimiento 12 meses mínimo"></div>
+      <p class="sub">Ojo: los fondos en pesos y en dólares no son comparables entre sí. Conviene filtrar por moneda.</p>`, S.r12Min!=null?1:0),
+    cost: grp('cost', 'Costo', `<div class="range"><div class="rv"><span>Costo anual máximo</span><b id="costV">${S.costMax>=5?'Sin límite':nf.format(S.costMax)+'%'}</b></div><input type="range" id="costMax" min="0.25" max="5" step="0.25" value="${S.costMax}" aria-label="Costo máximo"></div>`, S.costMax<5?1:0),
+    disp: grp('disp', 'Disponibilidad', `<label class="opt"><input type="checkbox" id="hideP"${S.hideP?' checked':''}><span class="lbl">Ocultar clases sin actividad (sin patrimonio, liquidadas o sin datos recientes)</span><span class="ct">${nP}</span></label>
+      <label class="opt"><input type="checkbox" id="onlySusc"${S.onlySusc?' checked':''}><span class="lbl">Solo abiertas a suscripción</span><span class="ct">${DATA.length-nC}</span></label>`, (S.hideP!==DEF.hideP?1:0)+(S.onlySusc?1:0)),
+  };
+  const ORDEN = ['ccy','aum','g','cls','liq','t','geo','hz','rend','cost','disp'];
   const focusId = document.activeElement && document.activeElement.id;
   const caret = focusId && document.activeElement.selectionStart;
-  $('#facetBox').innerHTML = h;
-  $('#gestBox').innerHTML = hg.replace('class="fgroup"','class="fgroup" style="border-top:none;padding-top:6px"');
+  $('#facetBox').innerHTML = ORDEN.map(k => F[k] ? facetHtml(F[k]) : P[k]).join('');
+  syncAccAll();
   if (focusId && focusId.startsWith('ms-')){ const el=document.getElementById(focusId); if(el){el.focus(); try{el.setSelectionRange(caret,caret)}catch(e){}} }
 }
 $('#filters').addEventListener('change', e=>{
@@ -233,6 +272,8 @@ $('#filters').addEventListener('input', e=>{
 });
 $('#filters').addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
+  if (b.dataset.acc){ const g=b.closest('.acc'); setAcc(g, !g.classList.contains('open')); saveAcc(); syncAccAll(); return; }
+  if (b.id==='accAll'){ const gs=[...document.querySelectorAll('#filters .acc')]; const abrir=!gs.every(g=>g.classList.contains('open')); gs.forEach(g=>setAcc(g,abrir)); saveAcc(); syncAccAll(); return; }
   if (b.dataset.more){ facetState[b.dataset.more].open=!facetState[b.dataset.more].open; renderFacets(); }
   if (b.dataset.clr){ S[b.dataset.clr]=[]; update(); }
 });

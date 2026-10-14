@@ -381,3 +381,17 @@ body.bloqueado > :not(.lock){visibility:hidden}
 .int-empty{color:var(--ink-3);font-size:13.5px;padding:6px 2px}
 .tray:not(.on){visibility:hidden}
 body[data-sec="int"] .tray, body[data-sec="int"] .drawer, body[data-sec="int"] .scrim{display:none}
+
+/* ---------- Panel de filtros desplegable ---------- */
+.fgroup.acc{padding-block:0}
+.acc-h{appearance:none;background:none;border:none;width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 2px;cursor:pointer;text-align:left;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.acc-h:hover{color:var(--ink)}
+.acc-m{display:flex;align-items:center;gap:8px;flex:none}
+.acc-n{background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:600;letter-spacing:0;border-radius:20px;padding:0 7px;line-height:18px}
+.chev{color:var(--ink-3);transition:transform .15s}
+.acc.open .chev{transform:rotate(180deg)}
+.acc-b{padding:0 2px 14px}
+.acc-b .sub{margin-top:6px}
+.acc-clr{display:block;margin-top:8px;font-size:12.5px}
+.filters .f-head{margin-bottom:2px}
+#listsBox .fgroup.acc{border-top:none}
