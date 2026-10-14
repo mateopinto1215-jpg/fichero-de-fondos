@@ -27,3 +27,7 @@ Path("data").mkdir(exist_ok=True)
 Path("data/sondeo.json").write_text(json.dumps(out, indent=1, ensure_ascii=False))
 ok = sum(1 for r in out if r.get("status") == 200)
 print(f"::notice title=Resumen::{ok}/{len(out)} URLs con 200")
+from urllib.parse import urlparse
+linea = " ".join(f"{r.get('status')}:{urlparse(r['url']).netloc.replace('www.','')}{'/' + urlparse(r['url']).path.strip('/').split('/')[0] if 'robots' not in r['url'] else ''}({(r.get('server') or '')[:10]})" for r in out)
+for i in range(0, len(linea), 900):
+    print(f"::error title=Tabla {i//900+1}::{linea[i:i+900]}")
