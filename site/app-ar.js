@@ -45,18 +45,14 @@ function derive(raw, usdArs){
   });
 }
 
-// "Fima Premium - Clase B" -> "Clase B"; "Clase Ley Nº 27.743" -> "Ley 27.743"; sin clase -> "Única"
+// Clase agrupada por letra: "Clase B", "Clase B2", "Clase BP" -> "Clase B". Sin letra (única, Ley 27.743, Art. 11) -> "Sin letra"
 function claseDe(n){
   const x = String(n||'');
-  if (/\bClase\s+(?:RAP\s+)?Ley\b/i.test(x)){ const m = x.match(/Ley\s*N?\s*[°º]?\s*([\d.]+)/i); return ('Ley '+(m?m[1]:'')).trim(); }
-  if (/\bClase\s+Art\.?\s*11/i.test(x)) return 'Art. 11 Dto. 99/2019';
-  const m = x.match(/\bClase\s+([^\s\-–—,()]+)/i);
-  if (!m) return 'Única';
-  const t = m[1];
-  if (/^[uú]nica$/i.test(t)) return 'Única';
-  return /^[A-Za-z0-9]{1,4}$/.test(t) ? 'Clase '+t.toUpperCase() : 'Otras';
+  if (/\bClase\s+(?:RAP\s+)?Ley\b/i.test(x) || /\bClase\s+Art\.?\s*11/i.test(x) || /\bClase\s+[uú]nica\b/i.test(x)) return 'Sin letra';
+  const m = x.match(/\bClase\s+([A-Za-z])[A-Za-z0-9]{0,3}(?![A-Za-z0-9])/);
+  return m ? 'Clase '+m[1].toUpperCase() : 'Sin letra';
 }
-const clsOrd = (a,b) => { const r = x => x.startsWith('Clase ')?1 : x==='Única'?3 : x==='Otras'?4 : 2; return r(a)-r(b) || a.localeCompare(b,'es',{numeric:true}); };
+const clsOrd = (a,b) => (a==='Sin letra') - (b==='Sin letra') || a.localeCompare(b,'es');
 
 /* ---------------------------------------------------------------- estado */
 const DEF = {q:'',t:[],ccy:[],cls:[],hz:[],liq:[],geo:[],g:[],costMax:5,r12Min:null,auMin:0,hideP:true,onlySusc:false,sort:'au:desc',view:'table',list:null,xr:'r12'};
@@ -94,6 +90,9 @@ function grp(key, title, body, nSel){
     </button>
     <div class="acc-b" id="acc-${key}"${open?'':' hidden'}>${body}</div></div>`;
 }
+function grpFijo(title, body, nSel){
+  return `<div class="fgroup fijo"><h3><span>${title}</span>${nSel?`<span class="acc-n">${nSel}</span>`:''}</h3>${body}</div>`;
+}
 function setAcc(g, open){
   g.classList.toggle('open', open);
   g.querySelector('.acc-h').setAttribute('aria-expanded', open);
@@ -111,7 +110,7 @@ function renderLists(){
   let h = `<button class="lrow${!S.list?' on':''}" data-list=""><span class="lbl">Todos los fondos</span><span class="ct">${DATA.length}</span></button>`;
   LISTS.forEach(l=>{ h += `<button class="lrow${S.list===l.id?' on':''}" data-list="${l.id}"><span class="lbl">${l.id==='fav'?'★ ':''}${esc(l.name)}</span><span class="ct">${l.keys.length}</span></button>`; });
   h += `<div class="newlist"><input id="nlName" placeholder="Nombre de nueva lista" aria-label="Nombre de nueva lista" maxlength="40"><button id="nlAdd">Crear</button></div>`;
-  $('#listsBox').innerHTML = grp('fav', 'Favoritos', h, S.list?1:0);
+  $('#listsBox').innerHTML = grpFijo('Favoritos', h, S.list?1:0);
   syncAccAll();
   const bar = $('#listBar');
   const l = S.list && LISTS.find(x=>x.id===S.list);
@@ -149,9 +148,9 @@ function computePeers(){
 
 /* ---------------------------------------------------------------- filtros */
 const FACETS = [
-  {k:'ccy', title:'Moneda', get:d=>d.ccyL},
+  {k:'ccy', title:'Moneda', get:d=>d.ccyL, fijo:true},
   {k:'g', title:'Gestora', get:d=>d.g, search:true},
-  {k:'cls', title:'Clase', get:d=>d.clsK, order:(a,b)=>clsOrd(a,b), hideZero:true, hint:'La letra la define cada fondo; en general separa tipos de inversor (minorista, institucional) o montos mínimos.'},
+  {k:'cls', title:'Clase', get:d=>d.clsK, order:(a,b)=>clsOrd(a,b), hideZero:true, hint:'Agrupada por letra (B1, B2 y BP cuentan como B). «Sin letra»: fondos de clase única o clases especiales como Ley 27.743.'},
   {k:'liq', title:'Plazo de liquidación', get:d=>d.liqL, order:(a,b)=>liqOrd(a)-liqOrd(b)},
   {k:'t', title:'Tipo de fondo', get:d=>d.t},
   {k:'geo', title:'Región', get:d=>d.geo},
@@ -238,13 +237,13 @@ function facetHtml(f){
   if (f.limit && list.length>f.limit) b += `<button class="linkbtn" data-more="${f.k}" style="margin-top:4px">${fs.open?'Ver menos':'Ver las '+list.length}</button>`;
   if (f.hint) b += `<p class="sub">${esc(f.hint)}</p>`;
   if (sel) b += `<button class="linkbtn acc-clr" data-clr="${f.k}">Quitar ${sel===1?'el filtro':'los '+sel+' filtros'}</button>`;
-  return grp(f.k, f.title, b, sel);
+  return f.fijo ? grpFijo(f.title, b, sel) : grp(f.k, f.title, b, sel);
 }
 function renderFacets(){
   const F = Object.fromEntries(FACETS.map(f=>[f.k,f]));
   const nP = DATA.filter(d=>d.pend).length, nC = DATA.filter(d=>!d.susc).length;
   const P = {
-    aum: grp('aum', 'Patrimonio', `<select class="fsel" id="auMin" aria-label="Patrimonio mínimo de la clase">
+    aum: grpFijo('Patrimonio', `<select class="fsel" id="auMin" aria-label="Patrimonio mínimo de la clase">
       ${[[0,'Cualquier tamaño'],[1,'Más de US$ 1 M'],[10,'Más de US$ 10 M'],[50,'Más de US$ 50 M'],[100,'Más de US$ 100 M'],[500,'Más de US$ 500 M']].map(([v,l])=>`<option value="${v}"${S.auMin==v?' selected':''}>${l}</option>`).join('')}</select>
       <p class="sub">Patrimonio de la clase. Los fondos en pesos se convierten al dólar oficial${META.usd_ars?` (${nf0.format(META.usd_ars)} $/US$)`:''}.</p>`, S.auMin?1:0),
     rend: grp('rend', 'Rendimiento', `<div class="range"><div class="rv"><span>Mínimo, últimos 12 meses</span><b id="r12V">${S.r12Min==null?'Cualquiera':'≥ '+nf0.format(S.r12Min)+'%'}</b></div><input type="range" id="r12Min" min="-20" max="80" step="1" value="${S.r12Min??-20}" aria-label="Rendimiento 12 meses mínimo"></div>
