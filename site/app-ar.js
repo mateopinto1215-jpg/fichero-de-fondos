@@ -45,15 +45,18 @@ function derive(raw, usdArs){
   });
 }
 
-// "Fima Premium - Clase B" -> "Clase B"; sin clase o "Clase Única" -> "Única"
+// "Fima Premium - Clase B" -> "Clase B"; "Clase Ley Nº 27.743" -> "Ley 27.743"; sin clase -> "Única"
 function claseDe(n){
-  const m = String(n||'').match(/\bClase\s+([^\s\-–—,()]+)/i);
+  const x = String(n||'');
+  if (/\bClase\s+(?:RAP\s+)?Ley\b/i.test(x)){ const m = x.match(/Ley\s*N?\s*[°º]?\s*([\d.]+)/i); return ('Ley '+(m?m[1]:'')).trim(); }
+  if (/\bClase\s+Art\.?\s*11/i.test(x)) return 'Art. 11 Dto. 99/2019';
+  const m = x.match(/\bClase\s+([^\s\-–—,()]+)/i);
   if (!m) return 'Única';
   const t = m[1];
   if (/^[uú]nica$/i.test(t)) return 'Única';
-  return /^[A-Za-z0-9]{1,3}$/.test(t) ? 'Clase '+t.toUpperCase() : 'Otras';
+  return /^[A-Za-z0-9]{1,4}$/.test(t) ? 'Clase '+t.toUpperCase() : 'Otras';
 }
-const clsOrd = (a,b) => { const r = x => x==='Única'?2 : x==='Otras'?3 : 1; return r(a)-r(b) || a.localeCompare(b,'es',{numeric:true}); };
+const clsOrd = (a,b) => { const r = x => x.startsWith('Clase ')?1 : x==='Única'?3 : x==='Otras'?4 : 2; return r(a)-r(b) || a.localeCompare(b,'es',{numeric:true}); };
 
 /* ---------------------------------------------------------------- estado */
 const DEF = {q:'',t:[],ccy:[],cls:[],hz:[],liq:[],geo:[],g:[],costMax:5,r12Min:null,auMin:0,hideP:true,onlySusc:false,sort:'au:desc',view:'table',list:null,xr:'r12'};
@@ -148,7 +151,7 @@ function computePeers(){
 const FACETS = [
   {k:'ccy', title:'Moneda', get:d=>d.ccyL},
   {k:'g', title:'Gestora', get:d=>d.g, search:true},
-  {k:'cls', title:'Clase', get:d=>d.clsK, order:(a,b)=>clsOrd(a,b), hint:'La letra la define cada fondo; en general separa tipos de inversor (minorista, institucional) o montos mínimos.'},
+  {k:'cls', title:'Clase', get:d=>d.clsK, order:(a,b)=>clsOrd(a,b), hideZero:true, hint:'La letra la define cada fondo; en general separa tipos de inversor (minorista, institucional) o montos mínimos.'},
   {k:'liq', title:'Plazo de liquidación', get:d=>d.liqL, order:(a,b)=>liqOrd(a)-liqOrd(b)},
   {k:'t', title:'Tipo de fondo', get:d=>d.t},
   {k:'geo', title:'Región', get:d=>d.geo},
@@ -219,7 +222,8 @@ function facetHtml(f){
   let list = keys;
   if (f.search && fs.q) list = keys.filter(k=>norm(k).includes(norm(fs.q)));
   const lim = f.limit && !fs.open ? f.limit : Infinity;
-  const vis = list.filter((k,i)=> i<lim || S[f.k].includes(k));
+  let vis = list.filter((k,i)=> i<lim || S[f.k].includes(k));
+  if (f.hideZero) vis = vis.filter(k => counts.get(k) || S[f.k].includes(k));
   const sel = S[f.k].length;
   let b = '';
   if (f.search) b += `<input class="minisearch" id="ms-${f.k}" placeholder="Buscar gestora…" value="${esc(fs.q)}" aria-label="Buscar gestora">`;
