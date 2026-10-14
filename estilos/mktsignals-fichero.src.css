@@ -1,0 +1,177 @@
+/* ==UserStyle==
+@name           Fichero de Fondos — apariencia para MKTSignals
+@namespace      github.com/mateopinto1215-jpg/fichero-de-fondos
+@version        1.0.0
+@description    Estilo personal: muestra funds.mktsignals.org con la tipografía y colores del Fichero de Fondos (claro y oscuro). Solo cambia cómo lo ves en tu navegador; no modifica ni copia el sitio.
+@author         Mateo
+@license        CC0-1.0 (estilo) · fuentes IBM Plex Sans y Source Serif 4 bajo SIL OFL 1.1
+@homepageURL    https://github.com/mateopinto1215-jpg/fichero-de-fondos
+@updateURL      https://raw.githubusercontent.com/mateopinto1215-jpg/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css
+@preprocessor   default
+==/UserStyle== */
+
+@-moz-document domain("funds.mktsignals.org") {
+
+/* ---------- Tipografías del Fichero (embebidas: el sitio no permite fuentes externas) ---------- */
+__FONTS__
+
+/* ---------- Paleta del Fichero ---------- */
+:root{
+  --fx-ground:#F3F4F1; --fx-surface:#FFFFFF; --fx-surface-2:#ECEEE9; --fx-surface-3:#E3E6E0;
+  --fx-ink:#15201B; --fx-ink-2:#47534D; --fx-ink-3:#77827C; --fx-line:#DADED7; --fx-line-2:#C9CFC6;
+  --fx-accent:#1D5A4C; --fx-accent-ink:#FFFFFF; --fx-accent-soft:#E1ECE7; --fx-brass:#9C7224;
+  --fx-pos:#1B7447; --fx-neg:#AE3A2D; --fx-warn:#9A6116; --fx-warn-soft:#F6ECDB;
+  --fx-rf-bg:#FBE7DC; --fx-rf:#9A3E14;
+  --fx-shadow:0 1px 2px rgba(20,32,27,.06),0 8px 28px rgba(20,32,27,.10);
+  --fx-serif:"Fx Source Serif 4","Source Serif 4",Georgia,"Times New Roman",serif;
+  --fx-sans:"Fx IBM Plex Sans","IBM Plex Sans",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --fx-r:6px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --fx-ground:#0E1412; --fx-surface:#151D1A; --fx-surface-2:#1B2521; --fx-surface-3:#222D29;
+  --fx-ink:#E6ECE8; --fx-ink-2:#ADB9B2; --fx-ink-3:#7F8C86; --fx-line:#27322D; --fx-line-2:#34413B;
+  --fx-accent:#72C2A8; --fx-accent-ink:#0E1412; --fx-accent-soft:#1B3029; --fx-brass:#D1A652;
+  --fx-pos:#5DC58E; --fx-neg:#F08274; --fx-warn:#E2A652; --fx-warn-soft:#2E2518;
+  --fx-rf-bg:#3A2218; --fx-rf:#F2A27E;
+  --fx-shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.45);
+  color-scheme:dark;
+}}
+
+/* ---------- Base ---------- */
+html, body{background:var(--fx-ground)!important;color:var(--fx-ink)!important}
+body, button, input, select, textarea, table{font-family:var(--fx-sans)!important}
+.font-display, h1, h2, h3{font-family:var(--fx-serif)!important;font-weight:600!important;letter-spacing:-.01em!important}
+h1{font-size:28px!important}
+::selection{background:var(--fx-accent-soft);color:var(--fx-ink)}
+a{text-decoration-color:var(--fx-line-2)}
+
+/* Colores de texto */
+.text-ink, .text-slate-900, .text-slate-800, .text-gray-900{color:var(--fx-ink)!important}
+.text-slate-700, .text-slate-600, .text-gray-700, .text-gray-600{color:var(--fx-ink-2)!important}
+.text-muted, .text-slate-500, .text-slate-400, .text-gray-500, .text-gray-400{color:var(--fx-ink-3)!important}
+.text-border, .text-slate-300{color:var(--fx-line-2)!important}
+.text-good, .text-emerald-600, .text-green-600{color:var(--fx-pos)!important}
+.text-bad, .text-red-600, .text-rose-600{color:var(--fx-neg)!important}
+.text-brand, .text-brand-deep, .text-teal-600, .text-cyan-600{color:var(--fx-accent)!important}
+.hover\:text-brand:hover, .group:hover .group-hover\:text-brand{color:var(--fx-accent)!important}
+.hover\:text-ink:hover{color:var(--fx-ink)!important}
+.hover\:text-bad:hover{color:var(--fx-neg)!important}
+.text-brand-gradient{background:none!important;-webkit-text-fill-color:var(--fx-accent)!important;color:var(--fx-accent)!important}
+
+/* Fondos y bordes */
+.bg-white, .bg-panel, .bg-slate-0{background-color:var(--fx-surface)!important}
+.bg-panel2, .bg-slate-50, .bg-slate-100, .bg-gray-50, .bg-gray-100,
+.bg-panel2\/40, .bg-panel2\/50, .bg-panel2\/60{background-color:var(--fx-surface-2)!important}
+.hover\:bg-panel2\/50:hover, .hover\:bg-panel2:hover, .hover\:bg-slate-50:hover, .hover\:bg-slate-100:hover{background-color:var(--fx-surface-2)!important}
+.border-border, .border-border\/60, .border-slate-200, .border-slate-100, .border-gray-200, .divide-border > * {border-color:var(--fx-line)!important}
+.border-slate-300{border-color:var(--fx-line-2)!important}
+.bg-brand, .bg-brand-gradient{background:var(--fx-accent)!important;color:var(--fx-accent-ink)!important}
+.bg-brand-soft, .bg-brand-deep\/30{background:var(--fx-accent-soft)!important}
+.border-brand, .border-brand\/60, .hover\:border-brand:hover{border-color:var(--fx-accent)!important}
+.ring-brand{--tw-ring-color:var(--fx-accent)!important}
+.ring-offset-1{--tw-ring-offset-color:var(--fx-surface)!important}
+.accent-brand{accent-color:var(--fx-accent)!important}
+.shadow-lg, .shadow-md, .shadow-sm, .shadow{box-shadow:none!important}
+
+/* ---------- Encabezado: como el del Fichero (claro, con línea inferior) ---------- */
+header.brand-surface, .brand-surface{
+  background:var(--fx-surface)!important;background-image:none!important;
+  color:var(--fx-ink)!important;border-bottom:1px solid var(--fx-line)!important;box-shadow:none!important}
+.brand-surface .text-white, .brand-surface .text-white\/90{color:var(--fx-ink)!important}
+.brand-surface .text-white\/70, .brand-surface [class*="text-white/"]{color:var(--fx-ink-3)!important}
+.brand-surface .hover\:text-white:hover, .brand-surface .group:hover .group-hover\:text-white{color:var(--fx-ink)!important}
+.brand-surface [class*="text-shadow"]{text-shadow:none!important}
+.brand-surface img{filter:saturate(.25) contrast(1.05)}
+.nav-link{color:var(--fx-ink-2)!important;background:transparent!important;border-radius:var(--fx-r)!important;font-weight:500!important}
+.nav-link:hover{color:var(--fx-ink)!important;background:var(--fx-surface-2)!important}
+.nav-link-active, .nav-link.nav-link-active{background:var(--fx-accent-soft)!important;color:var(--fx-accent)!important}
+.brand-surface input{
+  background:var(--fx-surface-2)!important;color:var(--fx-ink)!important;
+  box-shadow:inset 0 0 0 1px var(--fx-line)!important;border-radius:var(--fx-r)!important}
+.brand-surface input::placeholder{color:var(--fx-ink-3)!important}
+.brand-surface [class*="border-white"]{border-color:var(--fx-line-2)!important}
+.brand-surface .bg-white, .brand-surface a.bg-white, .brand-surface button.bg-white{
+  background:var(--fx-accent)!important;color:var(--fx-accent-ink)!important}
+.brand-surface svg{color:inherit}
+
+/* ---------- Tarjetas, campos y botones ---------- */
+.card{background:var(--fx-surface)!important;border:1px solid var(--fx-line)!important;border-radius:var(--fx-r)!important;box-shadow:none!important}
+.card::before, .card::after{display:none!important}
+.input, select.input, input.input{
+  background:var(--fx-surface)!important;color:var(--fx-ink)!important;
+  border:1px solid var(--fx-line-2)!important;border-radius:var(--fx-r)!important;box-shadow:none!important}
+.input:focus, .input:focus-within{outline:2px solid var(--fx-accent)!important;outline-offset:1px}
+input::placeholder{color:var(--fx-ink-3)!important}
+.btn{background:var(--fx-surface)!important;color:var(--fx-ink)!important;border:1px solid var(--fx-line-2)!important;
+  border-radius:var(--fx-r)!important;box-shadow:none!important;font-weight:500!important}
+.btn:hover{background:var(--fx-surface-2)!important}
+.btn.btn-active, .btn-active.btn, .cta-shine{
+  background:var(--fx-accent)!important;background-image:none!important;color:var(--fx-accent-ink)!important;border-color:var(--fx-accent)!important}
+.cta-shine::before, .cta-shine::after{display:none!important;animation:none!important}
+.segmented{background:var(--fx-surface)!important;border:1px solid var(--fx-line-2)!important;border-radius:var(--fx-r)!important;overflow:hidden;box-shadow:none!important;padding:0!important}
+.segmented > button{color:var(--fx-ink-2)!important;background:transparent!important;border-radius:0!important;font-weight:500!important;box-shadow:none!important}
+.segmented > button + button{border-left:1px solid var(--fx-line)!important}
+.segmented > button.btn-active{background:var(--fx-accent-soft)!important;color:var(--fx-accent)!important}
+
+/* Etiquetas (badges): mismos tonos que las píldoras del Fichero */
+.badge, .badge-brand{border-radius:3px!important;font-weight:600!important;letter-spacing:.02em}
+.badge-brand, .badge.ring-brand{background:var(--fx-accent-soft)!important;color:var(--fx-accent)!important;--tw-ring-color:var(--fx-accent)!important;border-color:var(--fx-accent)!important}
+.bg-emerald-50, .bg-green-50{background:color-mix(in srgb,var(--fx-pos) 13%,var(--fx-surface))!important}
+.text-emerald-700, .text-green-700{color:var(--fx-pos)!important}
+.border-emerald-200, .border-green-200{border-color:color-mix(in srgb,var(--fx-pos) 30%,transparent)!important}
+.bg-teal-50, .bg-cyan-50, .bg-sky-50{background:var(--fx-accent-soft)!important}
+.text-teal-700, .text-cyan-700, .text-sky-700{color:var(--fx-accent)!important}
+.border-teal-200, .border-cyan-200, .border-sky-200{border-color:color-mix(in srgb,var(--fx-accent) 30%,transparent)!important}
+.bg-amber-50, .bg-yellow-50{background:var(--fx-warn-soft)!important}
+.text-amber-700, .text-yellow-700{color:var(--fx-warn)!important}
+.border-amber-200, .border-yellow-200{border-color:color-mix(in srgb,var(--fx-warn) 35%,transparent)!important}
+.bg-orange-50{background:var(--fx-rf-bg)!important}
+.text-orange-700{color:var(--fx-rf)!important}
+.border-orange-200{border-color:color-mix(in srgb,var(--fx-rf) 30%,transparent)!important}
+.bg-red-50, .bg-rose-50{background:color-mix(in srgb,var(--fx-neg) 12%,var(--fx-surface))!important}
+.text-red-700, .text-rose-700{color:var(--fx-neg)!important}
+.border-red-200, .border-rose-200{border-color:color-mix(in srgb,var(--fx-neg) 30%,transparent)!important}
+
+.badge{background:var(--fx-surface-2)!important;border-color:var(--fx-line-2)!important;color:var(--fx-ink-2)!important}
+.badge.hover\:text-brand:hover{color:var(--fx-accent)!important;border-color:var(--fx-accent)!important}
+.badge.ring-2, .ring-2.ring-brand{--tw-ring-shadow:0 0 0 1px var(--fx-accent)!important;box-shadow:0 0 0 1px var(--fx-accent)!important}
+[class*="bg-[#"]{background:var(--fx-surface-3)!important;border-color:var(--fx-line-2)!important;color:var(--fx-ink-2)!important}
+
+/* ---------- Ficha del fondo ---------- */
+.bg-bg, .bg-bg\/95, .bg-bg\/90, .bg-bg\/80{background-color:color-mix(in srgb,var(--fx-ground) 94%,transparent)!important}
+.bg-border{background-color:var(--fx-line)!important}
+.kpi{background:var(--fx-surface)!important;border:1px solid var(--fx-line)!important;border-radius:var(--fx-r)!important;box-shadow:none!important}
+.kpi:hover{border-color:var(--fx-accent)!important}
+.kpi-label{color:var(--fx-ink-3)!important;letter-spacing:.05em!important}
+.kpi-value{font-family:var(--fx-serif)!important;font-weight:600!important}
+.kpi-value:not(.text-good):not(.text-bad){color:var(--fx-ink)!important}
+.kpi-value, .tabular-nums{font-variant-numeric:lining-nums tabular-nums!important}
+
+/* ---------- Tabla del screener ---------- */
+table{font-size:13px!important;font-variant-numeric:tabular-nums}
+thead, thead tr, thead th{background:var(--fx-surface)!important}
+thead th, thead th *{font-size:11px!important;font-weight:600!important;letter-spacing:.05em!important;text-transform:uppercase!important;color:var(--fx-ink-3)!important}
+thead tr{border-bottom:1px solid var(--fx-line-2)!important;background:var(--fx-surface)!important}
+thead th[aria-sort], thead th .text-brand{color:var(--fx-accent)!important}
+tbody tr{border-color:var(--fx-line)!important}
+tbody tr:hover{background:var(--fx-surface-2)!important}
+tbody td{padding-top:9px!important;padding-bottom:9px!important}
+tbody td a, tbody td .font-semibold, tbody td .font-medium{color:var(--fx-ink)}
+input[type="checkbox"], input[type="radio"]{accent-color:var(--fx-accent)!important}
+
+/* ---------- Gráficos: líneas y rejillas en los tonos del Fichero ---------- */
+.recharts-cartesian-grid line, .recharts-cartesian-axis-line{stroke:var(--fx-line)!important}
+.recharts-text, .recharts-cartesian-axis-tick-value{fill:var(--fx-ink-3)!important}
+.recharts-tooltip-wrapper .recharts-default-tooltip{background:var(--fx-surface)!important;border:1px solid var(--fx-line-2)!important;border-radius:var(--fx-r)!important;box-shadow:var(--fx-shadow)!important;color:var(--fx-ink)!important}
+
+/* ---------- Pie de página ---------- */
+footer{background:var(--fx-surface-2)!important;color:var(--fx-ink-3)!important;border-top:1px solid var(--fx-line)!important}
+footer *, footer .text-white, footer [class*="text-white/"], footer .text-slate-300, footer .text-slate-400{color:inherit!important}
+footer a{color:var(--fx-accent)!important}
+
+/* Menús desplegables y ventanas */
+[role="listbox"], [role="menu"], [role="dialog"], .popover, .dropdown{
+  background:var(--fx-surface)!important;color:var(--fx-ink)!important;border-color:var(--fx-line-2)!important;box-shadow:var(--fx-shadow)!important}
+[role="option"]:hover, [role="option"][aria-selected="true"]{background:var(--fx-surface-2)!important}
+}
