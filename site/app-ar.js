@@ -552,6 +552,7 @@ $('#sort').addEventListener('change', e=>{ S.sort=e.target.value; update(); });
 const setView=v=>{ S.view=v; ['table','cards','explore'].forEach(x=>$('#v'+{table:'Table',cards:'Cards',explore:'Explore'}[x]).setAttribute('aria-pressed',v===x)); renderResults(); save(); };
 $('#vTable').onclick=()=>setView('table'); $('#vCards').onclick=()=>setView('cards'); $('#vExplore').onclick=()=>setView('explore');
 document.addEventListener('keydown', e=>{
+  if ($('#secAr') && $('#secAr').hidden) return;
   if (e.key==='/' && !/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){ e.preventDefault(); $('#q').focus(); }
   if (e.key==='Escape'){ if(!$('#modal').hidden) $('#modal').hidden=true; else if(openId!=null) closeFund(); else closeFilters(); }
 });
@@ -568,11 +569,9 @@ function masthead(){
   const gen = META.generado ? new Date(META.generado) : null;
   $('#foot').innerHTML = `Fuente: <b>CAFCI</b> (Cámara Argentina de Fondos Comunes de Inversión) y <b>CNV</b>, a través de <a href="https://argentinadatos.com" target="_blank" rel="noopener">ArgentinaDatos</a>. Cada fondo enlaza a su ficha oficial en CAFCI.${gen?` Última actualización: ${gen.toLocaleString('es-AR',{dateStyle:'long',timeStyle:'short'})}.`:''}`;
 }
-async function init(){
+// La llama app.js una vez que la página se desbloqueó y los datos se descifraron.
+window.iniciarArgentina = function(j){
   try {
-    const r = await fetch('data/fondos-ar.json', {cache:'no-cache'});
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    const j = await r.json();
     META = {generado:j.generado, usd_ars:j.usd_ars, fuente:j.fuente};
     DATA = derive(j.clases||[], j.usd_ars);
   } catch(e){
@@ -595,4 +594,4 @@ async function init(){
   update();
   const hm = location.hash.match(/^#c(\d+)$/); if (hm && BY_CID.get(+hm[1])) openFund(BY_CID.get(+hm[1]).id);
 }
-init();
+

@@ -41,6 +41,11 @@ jobs:
       - name: Bajar datos (ArgentinaDatos, fuente CAFCI/CNV)
         run: python scripts/argentinadatos.py
 
+      - name: Cifrar los datos con la contraseña de la página
+        env:
+          CLAVE_PAGINA: ${{ secrets.CLAVE_PAGINA }}
+        run: python scripts/cifrar.py
+
       - name: Guardar historial de cuotapartes
         run: |
           git config user.name "fichero-bot"

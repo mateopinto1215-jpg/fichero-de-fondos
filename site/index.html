@@ -3,14 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fichero de Fondos · Argentina</title>
-<meta name="description" content="Fondos comunes de inversión argentinos: rendimientos, costos, cartera y ficha oficial de cada clase, con datos de CAFCI actualizados todos los días.">
+<title>Fichero de Fondos</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Fichero de Fondos — página personal.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
 <link rel="stylesheet" href="estilos.css?v=__V__">
 </head>
-<body>
+<body class="bloqueado">
+<div class="lock" id="lock" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+  <form class="lock-box" id="lockForm" autocomplete="on">
+    <svg width="46" height="46" viewBox="0 0 42 42" aria-hidden="true"><rect x="3" y="11" width="36" height="27" rx="3" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--ink)"/><path d="M8 11V6.5a2 2 0 0 1 2-2h12l3 3h7a2 2 0 0 1 2 2V11" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--ink-3)"/><rect x="16" y="20" width="10" height="4" rx="2" fill="var(--brass)"/><path d="M9 31h24" stroke="var(--line-2)" stroke-width="1.6"/></svg>
+    <h1 id="lockTitle">Fichero de Fondos</h1>
+    <p class="sub" style="margin:0 0 18px">Página personal. Ingresá tu contraseña para ver los datos.</p>
+    <input type="text" name="username" value="fichero" autocomplete="username" hidden>
+    <label class="lock-lbl" for="lockPass">Contraseña</label>
+    <input id="lockPass" type="password" autocomplete="current-password" required>
+    <label class="opt" style="margin-top:10px"><input type="checkbox" id="lockRemember" checked><span class="lbl">Recordar en este dispositivo</span></label>
+    <p class="lock-err" id="lockErr" role="alert" hidden></p>
+    <button class="btn primary" id="lockBtn" type="submit">Entrar</button>
+  </form>
+</div>
 <header class="masthead">
   <div class="wrap">
     <div class="mast-in">
@@ -24,14 +38,16 @@
       <div class="mast-meta" id="mastMeta"></div>
     </div>
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" aria-selected="false" disabled title="Sección en preparación para esta versión">Internacional <span class="soon">Próximamente</span></button>
-      <button class="tab" role="tab" aria-selected="true">Argentina <span class="nd tabsub" style="font-weight:400">· FCI registrados en CNV</span></button>
+      <button class="tab" role="tab" id="tabAr" data-sec="ar" aria-selected="true" aria-controls="secAr">Argentina <span class="nd tabsub" style="font-weight:400">· FCI registrados en CNV</span></button>
+      <button class="tab" role="tab" id="tabInt" data-sec="int" aria-selected="false" aria-controls="secInt">Internacional <span class="nd tabsub" style="font-weight:400">· UCITS / offshore</span></button>
+      <span class="tabs-sp"></span>
+      <button class="linkbtn tab-out" id="salir" type="button" title="Bloquear la página en este dispositivo">Bloquear</button>
     </div>
   </div>
 </header>
-<div class="disc"><div class="wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>Datos oficiales de la Cámara Argentina de Fondos Comunes de Inversión (CAFCI) y la CNV, obtenidos a través de ArgentinaDatos y actualizados automáticamente cada día hábil. Información de carácter informativo; no constituye una recomendación de inversión. Rendimientos pasados no garantizan rendimientos futuros.</span></div></div>
+<div class="disc"><div class="wrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span id="discText">Datos oficiales de la Cámara Argentina de Fondos Comunes de Inversión (CAFCI) y la CNV, obtenidos a través de ArgentinaDatos y actualizados automáticamente cada día hábil. Información de carácter informativo; no constituye una recomendación de inversión. Rendimientos pasados no garantizan rendimientos futuros.</span></div></div>
 
-<div class="wrap layout">
+<div class="wrap layout" id="secAr" role="tabpanel" aria-labelledby="tabAr">
   <aside class="filters" id="filters" aria-label="Filtros">
     <div class="f-head">
       <h2>Filtros</h2>
@@ -92,6 +108,52 @@
   </main>
 </div>
 
+<section class="wrap int" id="secInt" role="tabpanel" aria-labelledby="tabInt" hidden>
+  <div class="int-hero">
+    <div>
+      <div class="d-g">Fondos internacionales</div>
+      <h2>Buscá cualquier fondo UCITS</h2>
+      <p class="sub" style="font-size:13.5px;max-width:64ch">Se abre en el screener de <b>MKTSignals</b>: unos 7.700 fondos y 51.000 clases con valor diario, rentabilidad, volatilidad, Sharpe, caída máxima, TER y SRRI. Con el estilo del Fichero instalado, lo vas a ver con esta misma apariencia.</p>
+    </div>
+  </div>
+  <form class="int-search" id="intForm">
+    <div class="search" style="flex:1 1 360px">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="intQ" type="search" placeholder="Nombre del fondo, gestora o ISIN (ej. LU0629459743)…" autocomplete="off" aria-label="Buscar fondo internacional">
+      <kbd>/</kbd>
+    </div>
+    <div class="ctl"><label for="intDiv">Divisa</label>
+      <select id="intDiv"><option value="USD">USD</option><option value="EUR">EUR</option><option value="">Todas</option></select>
+    </div>
+    <div class="seg" role="group" aria-label="Tipo">
+      <button type="button" data-sub="funds" aria-pressed="true">Fondos</button>
+      <button type="button" data-sub="etfs" aria-pressed="false">ETFs</button>
+    </div>
+    <button class="btn primary" type="submit" style="height:44px">Buscar</button>
+  </form>
+  <p class="sub" id="intHint" style="margin-top:8px">Si escribís un ISIN, vas directo a la ficha del fondo.</p>
+
+  <h3 class="int-h3">Accesos directos</h3>
+  <div class="int-grid" id="intGrid"></div>
+
+  <h3 class="int-h3">Mis fondos internacionales <span class="nd" style="font-weight:400;text-transform:none;letter-spacing:0">· se guardan en este navegador</span></h3>
+  <div class="panel">
+    <div id="intList"></div>
+    <form class="newlist" id="intAdd" style="margin-top:12px;flex-wrap:wrap">
+      <input id="intAddIsin" placeholder="ISIN" maxlength="12" style="flex:0 1 170px;font-family:var(--mono)" aria-label="ISIN">
+      <input id="intAddName" placeholder="Nombre (opcional)" maxlength="80" style="flex:1 1 220px" aria-label="Nombre del fondo">
+      <button type="submit">Agregar</button>
+    </form>
+    <p class="lock-err" id="intAddErr" hidden></p>
+  </div>
+
+  <section class="guide" aria-label="Sobre esta sección">
+    <div><h4>De dónde salen los datos</h4><p>La información internacional es de MKTSignals (funds.mktsignals.org), que publica valores liquidativos recopilados de fuentes públicas. Esta sección solo te lleva a su sitio; no copia sus datos.</p></div>
+    <div><h4>Misma apariencia</h4><p>Para ver MKTSignals con la tipografía y colores del Fichero, instalá la extensión Stylus y el <a href="https://raw.githubusercontent.com/mateopinto1215-jpg/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a>.</p></div>
+    <div><h4>Volver</h4><p>Los enlaces se abren en esta misma pestaña. Usá «Atrás» del navegador para volver al Fichero; la sesión se mantiene abierta.</p></div>
+  </section>
+</section>
+
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-label="Ficha del fondo" aria-hidden="true"></aside>
 
@@ -110,5 +172,6 @@
 </div>
 
 <script src="app-ar.js?v=__V__"></script>
+<script src="app.js?v=__V__"></script>
 </body>
 </html>

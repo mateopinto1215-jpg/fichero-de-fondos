@@ -30,6 +30,7 @@
   --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#9b74d6;--s5:#8f8676;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
 button,input,select{font:inherit;color:inherit}
 a{color:var(--accent)}
@@ -342,3 +343,41 @@ dl.kv dd{margin:0;overflow-wrap:anywhere}
 .foot{color:var(--ink-3);font-size:12.5px;line-height:1.6;max-width:820px;margin-top:22px}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- Acceso con contraseña ---------- */
+.lock{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:var(--ground)}
+body.bloqueado .lock{display:grid}
+body.bloqueado > :not(.lock){visibility:hidden}
+.lock-box{width:min(380px,100%);background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:28px 26px 24px;display:flex;flex-direction:column}
+.lock-box h1{font:600 26px/1.15 var(--serif);margin:10px 0 4px;letter-spacing:-.01em}
+.lock-lbl{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.lock-box input[type=password]{height:44px;border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r);padding:0 12px;font-size:15px}
+.lock-box .btn{margin-top:16px;height:44px}
+.lock-box .btn[disabled]{opacity:.7;cursor:progress}
+.lock-err{color:var(--neg);font-size:13px;margin:10px 0 0}
+
+/* ---------- Pestañas ---------- */
+.tabs{align-items:flex-end}
+.tabs-sp{flex:1}
+.tab-out{margin-bottom:8px;font-size:12.5px;color:var(--ink-3)}
+.tab-out:hover{color:var(--accent)}
+
+/* ---------- Sección Internacional ---------- */
+.int{padding-block:26px 120px}
+.int-hero h2{font:600 26px/1.2 var(--serif);margin:4px 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.int-search{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.int-h3{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:30px 0 12px}
+.int-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.int-card{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;text-decoration:none;color:var(--ink);transition:border-color .12s,box-shadow .12s}
+.int-card:hover{border-color:var(--line-2);box-shadow:var(--shadow)}
+.int-card svg{flex:none;color:var(--accent);margin-top:2px}
+.int-card b{display:block;font:600 15.5px/1.3 var(--serif)}
+.int-card span{display:block;font-size:12.5px;color:var(--ink-3);margin-top:2px;line-height:1.4}
+.int-row{display:flex;align-items:center;gap:12px;padding:9px 4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.int-row:last-child{border-bottom:none}
+.int-row a{font-weight:600;color:var(--ink);text-decoration:none;flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.int-row a:hover{color:var(--accent)}
+.int-row .isin{font-size:12px}
+.int-empty{color:var(--ink-3);font-size:13.5px;padding:6px 2px}
+.tray:not(.on){visibility:hidden}
+body[data-sec="int"] .tray, body[data-sec="int"] .drawer, body[data-sec="int"] .scrim{display:none}
