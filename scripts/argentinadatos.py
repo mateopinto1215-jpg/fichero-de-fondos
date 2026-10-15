@@ -30,7 +30,7 @@ CAFCI_FICHA = "https://estadisticas.cafci.org.ar/fondos/{fid}?clase={cid}"
 ROOT = Path(__file__).resolve().parent.parent
 OUT_JSON = ROOT / "site" / "data" / "fondos-ar.json"
 RUN_JSON = ROOT / "data" / "ultima-corrida.json"
-UA = "FicheroDeFondos/1.0 (+https://github.com/mateopinto1215-jpg/fichero-de-fondos)"
+UA = "FicheroDeFondos/1.0 (+https://github.com/matepin/fichero-de-fondos)"
 
 RENDS = [  # campo ArgentinaDatos, campo días, clave interna
     ("ultimos7Dias", "diasUltimos7Dias", "d7"),

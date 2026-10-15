@@ -117,7 +117,7 @@
     <div>
       <div class="d-g">Fondos internacionales</div>
       <h2>Buscá cualquier fondo UCITS</h2>
-      <p class="sub" style="font-size:13.5px;max-width:64ch">Se abre en el screener de <b>MKTSignals</b>, con valor diario, rentabilidad, volatilidad, Sharpe, caída máxima, TER y SRRI de cada fondo. Con el estilo del Fichero instalado, lo vas a ver con esta misma apariencia.</p>
+      <p class="sub" style="font-size:13.5px;max-width:64ch">Se abre en el screener de <b>MKTSignals</b>, con valor diario, rentabilidad, volatilidad, Sharpe, caída máxima, TER y SRRI de cada fondo. Con el marcador <b>Colores Fichero</b> lo ves con esta misma apariencia.</p>
     </div>
   </div>
   <a class="int-feat" href="https://funds.mktsignals.org/screener?divisa=USD&amp;subtype=funds" target="_blank" rel="noopener">
@@ -143,6 +143,41 @@
   </form>
   <p class="sub" id="intHint" style="margin-top:8px">Si escribís un ISIN, vas directo a la ficha del fondo.</p>
 
+  <div class="panel int-estilo" id="intEstilo" hidden>
+    <div class="panel-h">
+      <div>
+        <h3>MKTSignals con los colores del Fichero</h3>
+        <p>Guardá una vez en cada dispositivo el marcador <b>Colores Fichero</b>. Después, en cualquier pestaña de MKTSignals, lo tocás y la página toma la apariencia del Fichero. No hace falta instalar nada; si lo tocás de nuevo, vuelve a sus colores.</p>
+      </div>
+      <div class="seg sm" role="group" aria-label="Dispositivo" id="estDisp">
+        <button type="button" data-disp="pc" aria-pressed="true">Computadora</button>
+        <button type="button" data-disp="ios" aria-pressed="false">iPhone / iPad</button>
+        <button type="button" data-disp="and" aria-pressed="false">Android</button>
+      </div>
+    </div>
+    <ol class="est-pasos" data-disp="pc">
+      <li>Mostrá la barra de favoritos del navegador (en Chrome: menú <b>⋮</b> › <b>Favoritos y listas</b> › <b>Mostrar barra de favoritos</b>).</li>
+      <li>Arrastrá este botón hasta la barra: <a class="est-marcador" id="estLink" href="#" title="Arrastralo a la barra de favoritos"><svg width="15" height="15" viewBox="0 0 64 64" aria-hidden="true"><rect x="11" y="23" width="42" height="29" rx="4" fill="none" stroke="currentColor" stroke-width="6"/><rect x="24" y="32" width="16" height="6" rx="3" fill="#E3B45C"/></svg>Colores Fichero</a></li>
+      <li>En la pestaña de MKTSignals, hacé clic en <b>Colores Fichero</b>.</li>
+      <li class="est-alt">¿No se puede arrastrar? <button class="linkbtn est-copiar" type="button">Copiá el código</button>, creá un favorito nuevo y pegalo como dirección.</li>
+    </ol>
+    <ol class="est-pasos" data-disp="ios" hidden>
+      <li><button class="btn sm est-copiar" type="button">Copiar el código del marcador</button></li>
+      <li>En Safari, tocá <b>Compartir</b> › <b>Agregar marcador</b> y guardalo.</li>
+      <li>Abrí <b>Marcadores</b> (el ícono del libro) › <b>Editar</b> y tocá el marcador nuevo. Nombre: <b>Colores Fichero</b>. En la dirección, borrá lo que hay y pegá el código.</li>
+      <li>En la pestaña de MKTSignals, abrí <b>Marcadores</b> y tocá <b>Colores Fichero</b>.</li>
+    </ol>
+    <ol class="est-pasos" data-disp="and" hidden>
+      <li><button class="btn sm est-copiar" type="button">Copiar el código del marcador</button></li>
+      <li>En Chrome, tocá <b>⋮</b> › la estrella para guardar esta página en favoritos, y después <b>Editar</b> en el aviso de abajo.</li>
+      <li>Nombre: <b>Colores Fichero</b>. En la URL, borrá lo que hay y pegá el código. Volvé atrás para guardar.</li>
+      <li>En la pestaña de MKTSignals, escribí <b>Colores Fichero</b> en la barra de direcciones y tocá la sugerencia con la estrella. Desde la lista de favoritos no funciona: tiene que ser desde la barra de direcciones.</li>
+    </ol>
+    <p class="est-nota">Si el navegador tiene tu cuenta (Google en Chrome, iCloud en Safari), el marcador aparece solo en tus otros dispositivos con esa cuenta. En Android también podés usar Firefox con la extensión <a href="https://addons.mozilla.org/es-ES/android/addon/styl-us/" target="_blank" rel="noopener">Stylus</a> y el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a>: ahí los colores se aplican solos.</p>
+    <div class="est-pie"><span id="estMsg" role="status"></span><button class="linkbtn" id="estListo" type="button">Ya lo tengo en este dispositivo</button></div>
+  </div>
+  <p class="int-estilo-min" id="intEstiloMin" hidden><span>Para ver MKTSignals con los colores del Fichero, tocá el marcador <b>Colores Fichero</b> en su pestaña.</span><button class="linkbtn" id="estVer" type="button">Cómo configurarlo</button></p>
+
   <h3 class="int-h3">Otros accesos</h3>
   <div class="int-grid" id="intGrid"></div>
 
@@ -159,7 +194,7 @@
 
   <section class="guide" aria-label="Sobre esta sección">
     <div><h4>De dónde salen los datos</h4><p>La información internacional es de MKTSignals (funds.mktsignals.org), que publica valores liquidativos recopilados de fuentes públicas. Esta sección solo te lleva a su sitio; no copia sus datos.</p></div>
-    <div><h4>Misma apariencia</h4><p>Para ver MKTSignals con la tipografía y colores del Fichero, instalá la extensión Stylus y el <a href="https://raw.githubusercontent.com/mateopinto1215-jpg/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a>.</p></div>
+    <div><h4>Misma apariencia</h4><p>El marcador <b>Colores Fichero</b> pinta MKTSignals con los colores del Fichero en cualquier navegador, con un toque por pestaña. En computadoras también podés instalar la extensión Stylus y el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a>: se aplica solo y suma las tipografías del Fichero.</p></div>
     <div><h4>Ir y volver</h4><p>MKTSignals se abre siempre en una pestaña nueva y el Fichero queda abierto en esta. Para volver, pasá a esta pestaña o cerrá la de MKTSignals.</p></div>
   </section>
 </section>
@@ -182,6 +217,7 @@
 </div>
 
 <script src="app-ar.js?v=__V__"></script>
+<script src="marcador.js?v=__V__"></script>
 <script src="app.js?v=__V__"></script>
 </body>
 </html>

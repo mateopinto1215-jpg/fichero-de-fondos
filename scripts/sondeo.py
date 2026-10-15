@@ -8,7 +8,7 @@ from pathlib import Path
 
 import requests
 
-UA = "FicheroDeFondos/1.0 (+https://github.com/mateopinto1215-jpg/fichero-de-fondos)"
+UA = "FicheroDeFondos/1.0 (+https://github.com/matepin/fichero-de-fondos)"
 urls = [l.strip() for l in Path(sys.argv[1]).read_text().splitlines() if l.strip() and not l.startswith("#")]
 out = []
 for u in urls:

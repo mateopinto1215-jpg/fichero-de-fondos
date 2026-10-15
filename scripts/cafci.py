@@ -37,7 +37,7 @@ OUT_JSON = ROOT / "site" / "data" / "fondos-ar.json"
 HIST_DIR = ROOT / "data" / "vcp"
 RUN_JSON = ROOT / "data" / "ultima-corrida.json"
 
-UA = "FicheroDeFondos/1.0 (+https://github.com/mateopinto1215-jpg/fichero-de-fondos)"
+UA = "FicheroDeFondos/1.0 (+https://github.com/matepin/fichero-de-fondos)"
 WORKERS = 4          # pedidos simultáneos: bajo a propósito, para no cargar el sitio de CAFCI
 PAUSA = 0.25         # segundos entre pedidos de cada worker
 REINTENTOS = 3

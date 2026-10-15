@@ -1,20 +1,20 @@
 // ==UserScript==
 // @name         Fichero de Fondos — botón «Volver al Fichero» en MKTSignals
-// @namespace    github.com/mateopinto1215-jpg/fichero-de-fondos
-// @version      1.0.0
+// @namespace    github.com/matepin/fichero-de-fondos
+// @version      1.0.1
 // @description  Agrega en funds.mktsignals.org un botón fijo para volver al Fichero de Fondos (Argentina o Internacional). Solo agrega un enlace; no lee ni modifica los datos del sitio.
 // @author       Mateo
 // @match        https://funds.mktsignals.org/*
 // @run-at       document-idle
 // @grant        none
 // @noframes
-// @updateURL    https://raw.githubusercontent.com/mateopinto1215-jpg/fichero-de-fondos/main/estilos/mktsignals-volver.user.js
-// @downloadURL  https://raw.githubusercontent.com/mateopinto1215-jpg/fichero-de-fondos/main/estilos/mktsignals-volver.user.js
+// @updateURL    https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-volver.user.js
+// @downloadURL  https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-volver.user.js
 // ==/UserScript==
 
 (function () {
   'use strict';
-  const FICHERO = 'https://mateopinto1215-jpg.github.io/fichero-de-fondos/';
+  const FICHERO = 'https://matepin.github.io/fichero-de-fondos/';
   const ID = 'fichero-volver';
 
   const css = `

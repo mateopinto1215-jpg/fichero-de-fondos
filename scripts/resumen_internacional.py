@@ -13,7 +13,7 @@ from pathlib import Path
 import requests
 
 URL = "https://funds.mktsignals.org/"
-UA = "FicheroDeFondos/1.0 (+https://github.com/mateopinto1215-jpg/fichero-de-fondos)"
+UA = "FicheroDeFondos/1.0 (+https://github.com/matepin/fichero-de-fondos)"
 ROOT = Path(__file__).resolve().parent.parent
 DATOS = ROOT / "site" / "data" / "fondos-ar.json"
 ULTIMO = ROOT / "data" / "internacional.json"

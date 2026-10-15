@@ -194,6 +194,46 @@ $('#intAdd').addEventListener('submit', e => {
 });
 pintarMis();
 
+/* Marcador «Colores Fichero»: pinta MKTSignals con los colores del Fichero (lo arma estilos/armar_marcador.py) */
+(function(){
+  const M = window.MARCADOR_FICHERO;
+  if (!M) return;
+  const LS = 'fichero-int-estilo';
+  const caja = $('#intEstilo'), min = $('#intEstiloMin'), msg = $('#estMsg');
+  let listo = false;
+  try { listo = localStorage.getItem(LS) === 'listo'; } catch(e){}
+  const mostrar = () => { caja.hidden = listo; min.hidden = !listo; };
+  const aviso = t => { msg.textContent = t; clearTimeout(aviso.t); aviso.t = setTimeout(() => { msg.textContent = ''; }, 6000); };
+  const ua = navigator.userAgent;
+  let disp = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) ? 'ios' : /Android/.test(ua) ? 'and' : 'pc';
+  function elegir(d){
+    disp = d;
+    document.querySelectorAll('#estDisp [data-disp]').forEach(b => b.setAttribute('aria-pressed', b.dataset.disp === d));
+    document.querySelectorAll('.est-pasos[data-disp]').forEach(o => { o.hidden = o.dataset.disp !== d; });
+  }
+  document.querySelectorAll('#estDisp [data-disp]').forEach(b => b.addEventListener('click', () => elegir(b.dataset.disp)));
+  elegir(disp);
+
+  const link = $('#estLink');
+  link.href = M;
+  link.addEventListener('click', e => { e.preventDefault(); aviso('Arrastralo hasta la barra de favoritos: se usa desde la pestaña de MKTSignals.'); });
+
+  async function copiar(){
+    let ok = false;
+    try { await navigator.clipboard.writeText(M); ok = true; } catch(e){
+      const t = document.createElement('textarea'); t.value = M; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      document.body.appendChild(t); t.select(); t.setSelectionRange(0, M.length);
+      try { ok = document.execCommand('copy'); } catch(e2){}
+      t.remove();
+    }
+    aviso(ok ? 'Código copiado. Seguí con el paso siguiente.' : 'No se pudo copiar. Probá de nuevo.');
+  }
+  document.querySelectorAll('.est-copiar').forEach(b => b.addEventListener('click', copiar));
+  $('#estListo').addEventListener('click', () => { listo = true; try { localStorage.setItem(LS, 'listo'); } catch(e){} mostrar(); });
+  $('#estVer').addEventListener('click', () => { listo = false; try { localStorage.removeItem(LS); } catch(e){} mostrar(); });
+  mostrar();
+})();
+
 /* ================================================================ arranque */
 irA(seccionDesdeHash(), false);
 intentarClaveGuardada().then(ok => { if (!ok) setTimeout(() => $('#lockPass').focus(), 50); });

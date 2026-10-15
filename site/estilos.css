@@ -411,3 +411,20 @@ body[data-sec="int"] .tray, body[data-sec="int"] .drawer, body[data-sec="int"] .
 .int-feat-t span:last-child{font-size:13.5px;opacity:.85;line-height:1.45}
 .int-feat-go{flex:none;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;background:color-mix(in srgb,var(--accent-ink) 14%,transparent);border:1px solid color-mix(in srgb,var(--accent-ink) 35%,transparent);border-radius:var(--r);padding:10px 14px;white-space:nowrap}
 @media (max-width:640px){.int-feat{flex-wrap:wrap;gap:12px;padding:18px}.int-feat-go{width:100%;justify-content:center}}
+
+/* Marcador «Colores Fichero» (Internacional) */
+.int-estilo{margin-top:22px}
+.est-pasos{margin:8px 0 0;padding-left:22px;display:grid;gap:10px;font-size:14px;color:var(--ink-2);line-height:1.55;max-width:84ch}
+.est-pasos li::marker{color:var(--ink-3);font-weight:600}
+.est-pasos b{color:var(--ink);font-weight:600}
+.est-pasos .est-alt{list-style:none;margin-left:-22px;font-size:13px;color:var(--ink-3)}
+.est-pasos .linkbtn{font-size:inherit;padding:0}
+.est-marcador{display:inline-flex;align-items:center;gap:7px;margin-left:4px;padding:6px 12px;border-radius:var(--r);background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:13.5px;text-decoration:none;cursor:grab;vertical-align:middle;box-shadow:var(--shadow);white-space:nowrap}
+.est-marcador:active{cursor:grabbing}
+.btn.sm{padding:7px 13px;font-size:13.5px}
+.est-nota{margin:16px 0 0;font-size:12.5px;color:var(--ink-3);line-height:1.55;max-width:84ch}
+.est-pie{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--line);padding-top:10px;min-height:38px}
+#estMsg{font-size:13px;color:var(--accent);font-weight:500}
+#estListo{margin-left:auto}
+.int-estilo-min{display:flex;align-items:center;justify-content:space-between;gap:6px 14px;flex-wrap:wrap;margin:18px 0 0;font-size:13.5px;color:var(--ink-2);padding:10px 14px;border:1px dashed var(--line-2);border-radius:var(--r)}
+.int-estilo-min b{color:var(--ink)}

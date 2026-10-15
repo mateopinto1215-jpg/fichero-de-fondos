@@ -1,12 +1,12 @@
 /* ==UserStyle==
 @name           Fichero de Fondos — apariencia para MKTSignals
-@namespace      github.com/mateopinto1215-jpg/fichero-de-fondos
-@version        1.0.0
+@namespace      github.com/matepin/fichero-de-fondos
+@version        1.1.0
 @description    Estilo personal: muestra funds.mktsignals.org con la tipografía y colores del Fichero de Fondos (claro y oscuro). Solo cambia cómo lo ves en tu navegador; no modifica ni copia el sitio.
 @author         Mateo
 @license        CC0-1.0 (estilo) · fuentes IBM Plex Sans y Source Serif 4 bajo SIL OFL 1.1
-@homepageURL    https://github.com/mateopinto1215-jpg/fichero-de-fondos
-@updateURL      https://raw.githubusercontent.com/mateopinto1215-jpg/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css
+@homepageURL    https://github.com/matepin/fichero-de-fondos
+@updateURL      https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css
 @preprocessor   default
 ==/UserStyle== */
 
@@ -158,7 +158,7 @@ thead, thead tr, thead th{background:var(--fx-surface)!important}
 thead th, thead th *{font-size:11px!important;font-weight:600!important;letter-spacing:.05em!important;text-transform:uppercase!important;color:var(--fx-ink-3)!important}
 thead tr{border-bottom:1px solid var(--fx-line-2)!important;background:var(--fx-surface)!important}
 thead th[aria-sort], thead th .text-brand{color:var(--fx-accent)!important}
-tbody tr{border-color:var(--fx-line)!important}
+tbody tr, tbody td, tbody th{border-color:var(--fx-line)!important}
 tbody tr:hover{background:var(--fx-surface-2)!important}
 tbody td{padding-top:9px!important;padding-bottom:9px!important}
 tbody td a, tbody td .font-semibold, tbody td .font-medium{color:var(--fx-ink)}
