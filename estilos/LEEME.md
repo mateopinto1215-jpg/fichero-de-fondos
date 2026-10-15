@@ -1,40 +1,49 @@
 # Personalización de MKTSignals
 
-## 1. Marcador «Colores Fichero» (cualquier dispositivo, sin instalar nada)
+Todo se configura una vez por dispositivo desde el recuadro «MKTSignals con los colores del Fichero» de la sección **Internacional** (detecta si estás en computadora, iPhone/iPad o Android y muestra los pasos). Solo cambia cómo se ve el sitio en tu navegador: no modifica MKTSignals ni copia sus datos.
 
-Un marcador (bookmarklet) que, tocado estando en funds.mktsignals.org, pinta la página con los colores del Fichero; tocado de nuevo, vuelve a los originales. Funciona en computadoras, iPhone/iPad (Safari) y Android (Chrome, desde la barra de direcciones). Se toca una vez por pestaña; dentro de la misma pestaña se mantiene al navegar.
+| Dispositivo | Automático (se configura una vez) | Sin instalar nada |
+|---|---|---|
+| Computadora (Chrome, Edge, Firefox) | Extensión Stylus + `mktsignals-fichero.user.css` | Marcador «Colores Fichero» |
+| iPhone, iPad, Mac con Safari | App gratis **Userscripts** + `mktsignals-fichero.user.js` | Marcador «Colores Fichero» |
+| Android | Firefox + Stylus + `mktsignals-fichero.user.css` | Marcador en Chrome (desde la barra de direcciones) |
 
-La sección **Internacional** del Fichero tiene el recuadro «MKTSignals con los colores del Fichero» con el botón para arrastrar, el botón para copiar el código y los pasos por dispositivo.
+## 1. Estilo automático
 
-Es el mismo estilo que el de Stylus, sin las fuentes embebidas (para que el marcador sea corto): usa IBM Plex Sans / Source Serif 4 si están instaladas y, si no, las del sistema.
+### Stylus (computadoras y Firefox para Android)
 
-- Código para pegar como dirección de un marcador: `marcador-mktsignals.txt`
-- Se genera desde `mktsignals-fichero.src.css` con `python estilos/armar_marcador.py` (escribe también `site/marcador.js`, que usa la página).
-
-## 2. Estilo del Fichero (Stylus)
-
-`mktsignals-fichero.user.css` es un estilo de usuario para la extensión **Stylus**. Muestra funds.mktsignals.org con la tipografía y los colores del Fichero de Fondos, en modo claro y oscuro (sigue la configuración del sistema).
-
-Solo cambia cómo se ve el sitio en tu navegador. No modifica el sitio ni copia sus datos.
-
-### Instalar
-
-1. Instalar Stylus: https://chromewebstore.google.com/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne
+1. Instalar Stylus: Chrome/Edge https://chromewebstore.google.com/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne · Firefox https://addons.mozilla.org/es-ES/firefox/addon/styl-us/ · Firefox para Android https://addons.mozilla.org/es-ES/android/addon/styl-us/
 2. Abrir https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css
 3. Stylus muestra la vista previa: tocar **Instalar estilo**.
 
-Las actualizaciones se reciben desde la misma URL (Stylus → Buscar actualizaciones).
+Con Chrome y la cuenta de Google, la extensión se instala sola en las otras computadoras; para que pase también el estilo, activar en las opciones de Stylus la sincronización en la nube. Las actualizaciones se reciben desde la misma URL.
+
+### Userscripts (Safari en iPhone, iPad y Mac)
+
+1. Instalar la app gratis Userscripts: https://apps.apple.com/app/id1463298887 y abrirla una vez (si pide una carpeta para los scripts, elegir cualquiera).
+2. Activar la extensión: Ajustes › Apps › Safari › Extensiones › Userscripts (iOS 17: Ajustes › Safari › Extensiones) y en «Otros sitios web» elegir Permitir.
+3. En Safari abrir https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.js, tocar el botón de extensiones de la barra de direcciones › Userscripts › Instalar.
+
+`mktsignals-fichero.user.js` también funciona con Tampermonkey o Violentmonkey. Se ejecuta al inicio de la página (sin parpadeo de los colores originales) y vuelve a poner el estilo si al navegar se pierde.
 
 ### Editar
 
-Se modifica `mktsignals-fichero.src.css` y se regenera el archivo final, que trae las fuentes embebidas (el sitio no permite cargar fuentes externas). Después, regenerar también el marcador con `python estilos/armar_marcador.py`.
+Se modifica `mktsignals-fichero.src.css` y se regeneran el `.user.css` y el `.user.js`, que traen las fuentes embebidas (el sitio no permite cargar fuentes externas), y el marcador:
 
 ```bash
 npm pack @fontsource/ibm-plex-sans@5.1.1 @fontsource/source-serif-4@5.1.1   # en una carpeta aparte, descomprimir
 python estilos/armar_userstyle.py <carpeta con los paquetes>
+python estilos/armar_marcador.py
 ```
 
 Fuentes: IBM Plex Sans y Source Serif 4, licencia SIL Open Font License 1.1.
+
+## 2. Marcador «Colores Fichero» (sin instalar nada)
+
+Un marcador (bookmarklet) que, tocado estando en funds.mktsignals.org, pinta la página con los colores del Fichero; tocado de nuevo, vuelve a los originales. Funciona en computadoras, iPhone/iPad (Safari) y Android (Chrome, desde la barra de direcciones). Se toca una vez por pestaña; dentro de la misma pestaña se mantiene al navegar. No lleva las fuentes embebidas (para que sea corto): usa IBM Plex Sans / Source Serif 4 si están instaladas y, si no, las del sistema.
+
+- Código para pegar como dirección de un marcador: `marcador-mktsignals.txt`
+- Se genera con `python estilos/armar_marcador.py` (escribe también `site/marcador.js`, que usa la página).
 
 ## 3. Botón «Volver al Fichero» (Tampermonkey)
 

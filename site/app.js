@@ -194,11 +194,12 @@ $('#intAdd').addEventListener('submit', e => {
 });
 pintarMis();
 
-/* Marcador «Colores Fichero»: pinta MKTSignals con los colores del Fichero (lo arma estilos/armar_marcador.py) */
+/* MKTSignals con los colores del Fichero: pasos por dispositivo (Stylus / Userscripts) y el marcador
+   «Colores Fichero» como alternativa sin instalar nada (lo arma estilos/armar_marcador.py) */
 (function(){
-  const M = window.MARCADOR_FICHERO;
-  if (!M) return;
+  const M = window.MARCADOR_FICHERO || '';
   const LS = 'fichero-int-estilo';
+  if (!M) document.querySelectorAll('.est-alt').forEach(d => { d.hidden = true; });
   const caja = $('#intEstilo'), min = $('#intEstiloMin'), msg = $('#estMsg');
   let listo = false;
   try { listo = localStorage.getItem(LS) === 'listo'; } catch(e){}
@@ -209,13 +210,13 @@ pintarMis();
   function elegir(d){
     disp = d;
     document.querySelectorAll('#estDisp [data-disp]').forEach(b => b.setAttribute('aria-pressed', b.dataset.disp === d));
-    document.querySelectorAll('.est-pasos[data-disp]').forEach(o => { o.hidden = o.dataset.disp !== d; });
+    document.querySelectorAll('.est-modo[data-disp]').forEach(o => { o.hidden = o.dataset.disp !== d; });
   }
   document.querySelectorAll('#estDisp [data-disp]').forEach(b => b.addEventListener('click', () => elegir(b.dataset.disp)));
   elegir(disp);
 
   const link = $('#estLink');
-  link.href = M;
+  link.href = M || '#';
   link.addEventListener('click', e => { e.preventDefault(); aviso('Arrastralo hasta la barra de favoritos: se usa desde la pestaña de MKTSignals.'); });
 
   async function copiar(){

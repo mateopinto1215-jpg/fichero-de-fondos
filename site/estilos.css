@@ -417,7 +417,6 @@ body[data-sec="int"] .tray, body[data-sec="int"] .drawer, body[data-sec="int"] .
 .est-pasos{margin:8px 0 0;padding-left:22px;display:grid;gap:10px;font-size:14px;color:var(--ink-2);line-height:1.55;max-width:84ch}
 .est-pasos li::marker{color:var(--ink-3);font-weight:600}
 .est-pasos b{color:var(--ink);font-weight:600}
-.est-pasos .est-alt{list-style:none;margin-left:-22px;font-size:13px;color:var(--ink-3)}
 .est-pasos .linkbtn{font-size:inherit;padding:0}
 .est-marcador{display:inline-flex;align-items:center;gap:7px;margin-left:4px;padding:6px 12px;border-radius:var(--r);background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:13.5px;text-decoration:none;cursor:grab;vertical-align:middle;box-shadow:var(--shadow);white-space:nowrap}
 .est-marcador:active{cursor:grabbing}
@@ -428,3 +427,11 @@ body[data-sec="int"] .tray, body[data-sec="int"] .drawer, body[data-sec="int"] .
 #estListo{margin-left:auto}
 .int-estilo-min{display:flex;align-items:center;justify-content:space-between;gap:6px 14px;flex-wrap:wrap;margin:18px 0 0;font-size:13.5px;color:var(--ink-2);padding:10px 14px;border:1px dashed var(--line-2);border-radius:var(--r)}
 .int-estilo-min b{color:var(--ink)}
+.est-modo .est-nota{margin-top:10px}
+.est-alt{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.est-alt summary{cursor:pointer;font-size:13.5px;font-weight:500;color:var(--ink-2);list-style:none;display:flex;align-items:flex-start;gap:9px}
+.est-alt summary::-webkit-details-marker{display:none}
+.est-alt summary::before{content:"";width:7px;height:7px;border-right:1.6px solid var(--ink-3);border-bottom:1.6px solid var(--ink-3);transform:rotate(-45deg);transition:transform .15s;flex:none;margin-top:.5em}
+.est-alt[open] summary::before{transform:translateY(-2px) rotate(45deg)}
+.est-alt summary:hover{color:var(--ink)}
+.est-alt .est-pasos{margin-top:10px}

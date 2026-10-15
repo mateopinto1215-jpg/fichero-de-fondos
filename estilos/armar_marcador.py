@@ -21,13 +21,16 @@ AVISO_OTRO_SITIO = ("Este marcador se usa estando en funds.mktsignals.org: "
                     "abrí ahí un fondo o el screener y tocalo de nuevo.")
 
 
+def sin_envoltorio(css: str) -> str:
+    """Quita el encabezado ==UserStyle== y el envoltorio @-moz-document domain(...) { ... } propios de Stylus."""
+    css = re.sub(r"/\* ==UserStyle==.*?==/UserStyle== \*/", "", css, flags=re.S)
+    inicio = css.index("@-moz-document")
+    return css[css.index("{", inicio) + 1: css.rindex("}")]
+
+
 def css_para_marcador() -> str:
-    src = (AQUI / "mktsignals-fichero.src.css").read_text(encoding="utf-8")
-    src = re.sub(r"/\* ==UserStyle==.*?==/UserStyle== \*/", "", src, flags=re.S)
+    src = sin_envoltorio((AQUI / "mktsignals-fichero.src.css").read_text(encoding="utf-8"))
     src = src.replace("__FONTS__", "")
-    # Quita el envoltorio @-moz-document domain(...) { ... } propio de Stylus.
-    inicio = src.index("@-moz-document")
-    src = src[src.index("{", inicio) + 1: src.rindex("}")]
     # Sin fuentes embebidas: se quitan sus nombres y quedan las alternativas.
     src = src.replace('"Fx Source Serif 4",', "").replace('"Fx IBM Plex Sans",', "")
     return minificar(src)
@@ -40,7 +43,7 @@ def minificar(css: str) -> str:
     css = re.sub(r":\s+", ":", css)
     css = css.replace(";}", "}").strip()
     # Variables más cortas: --fx-surface-2 -> --f7, etc.
-    nombres = sorted(set(re.findall(r"--fx-[a-z0-9-]+", css)), key=len, reverse=True)
+    nombres = sorted(set(re.findall(r"--fx-[a-z0-9-]+", css)), key=lambda n: (-len(n), n))
     for i, n in enumerate(nombres):
         css = re.sub(re.escape(n) + r"(?![a-z0-9-])", f"--f{i:x}", css)
     return css

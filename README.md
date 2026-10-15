@@ -3,7 +3,7 @@
 Página personal que centraliza fondos comunes de inversión, protegida con contraseña:
 
 - **Argentina**: datos oficiales de CAFCI y CNV, actualizados automáticamente cada día hábil.
-- **Internacional**: buscador y accesos directos a MKTSignals (funds.mktsignals.org), con una lista propia de fondos guardados en el navegador. Para verlo con la apariencia del Fichero: marcador «Colores Fichero» (sin instalar nada, en cualquier dispositivo) o estilo de Stylus; ver `estilos/LEEME.md`.
+- **Internacional**: buscador y accesos directos a MKTSignals (funds.mktsignals.org), con una lista propia de fondos guardados en el navegador. Para verlo con la apariencia del Fichero: se configura una vez por dispositivo (Stylus, app Userscripts en Safari o marcador «Colores Fichero»); ver `estilos/LEEME.md`.
 
 ## Contraseña
 
