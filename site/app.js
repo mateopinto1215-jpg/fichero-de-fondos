@@ -135,7 +135,9 @@ $('#intForm').addEventListener('submit', e => {
   e.preventDefault();
   const q = $('#intQ').value.trim();
   const isin = q.replace(/\s+/g,'').toUpperCase();
-  location.href = ISIN_RE.test(isin) ? urlFondo(isin) : urlScreener(q);
+  const url = ISIN_RE.test(isin) ? urlFondo(isin) : urlScreener(q);
+  const w = window.open(url, '_blank');
+  if (w) w.opener = null; else location.href = url; // si el navegador bloquea la pestaña nueva, abre en esta
 });
 document.addEventListener('keydown', e => {
   if ($('#secInt').hidden) return;
@@ -161,7 +163,7 @@ const ACCESOS = [
   ['Seguimiento', 'Tu lista de seguimiento en MKTSignals', () => `${MKT}/seguimiento`, 'ojo'],
 ];
 $('#intGrid').innerHTML = ACCESOS.map(([t, d, u, ic]) =>
-  `<a class="int-card" href="${escH(u())}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${IC[ic]}</svg><div><b>${escH(t)}</b><span>${escH(d)}</span></div></a>`).join('');
+  `<a class="int-card" href="${escH(u())}" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${IC[ic]}</svg><div><b>${escH(t)}</b><span>${escH(d)}</span></div></a>`).join('');
 
 /* Mis fondos internacionales (solo en este navegador) */
 const MIS_LS = 'fichero-int-fondos';
@@ -171,7 +173,7 @@ const guardarMis = () => { try { localStorage.setItem(MIS_LS, JSON.stringify(MIS
 let borrarArm = null;
 function pintarMis(){
   $('#intList').innerHTML = MIS.length ? MIS.map((f, i) => `<div class="int-row">
-      <a href="${escH(urlFondo(f.isin))}">${escH(f.n || f.isin)}</a>
+      <a href="${escH(urlFondo(f.isin))}" target="_blank" rel="noopener">${escH(f.n || f.isin)}</a>
       <span class="isin">${escH(f.isin)}</span>
       <button class="linkbtn" data-del="${i}" style="color:var(--ink-3)">${borrarArm === i ? 'Confirmar' : 'Quitar'}</button>
     </div>`).join('') : `<p class="int-empty">Todavía no guardaste fondos. Agregá el ISIN de los que seguís para abrirlos con un clic.</p>`;
