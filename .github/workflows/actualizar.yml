@@ -41,6 +41,9 @@ jobs:
       - name: Bajar datos (ArgentinaDatos, fuente CAFCI/CNV)
         run: python scripts/argentinadatos.py
 
+      - name: Resumen de la sección Internacional (portada de MKTSignals)
+        run: python scripts/resumen_internacional.py
+
       - name: Cifrar los datos con la contraseña de la página
         env:
           CLAVE_PAGINA: ${{ secrets.CLAVE_PAGINA }}

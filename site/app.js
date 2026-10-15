@@ -48,7 +48,7 @@ async function descifrar(key){
 let iniciado = false;
 function abrir(datos){
   document.body.classList.remove('bloqueado');
-  if (!iniciado){ iniciado = true; window.iniciarArgentina(datos); }
+  if (!iniciado){ iniciado = true; window.iniciarArgentina(datos); MAST_AR = $('#mastMeta').innerHTML; INTL = datos.internacional || null; MAST_INT = mastInternacional(); }
   irA(seccionDesdeHash(), false);
 }
 async function intentarClaveGuardada(){
@@ -78,17 +78,30 @@ $('#lockForm').addEventListener('submit', async e => {
 });
 $('#salir').addEventListener('click', () => { olvidarClave(); location.reload(); });
 
+/* ================================================================ encabezado por sección */
+let MAST_AR = '', MAST_INT = '', INTL = null;
+const MESES_C = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const nfE = new Intl.NumberFormat('es-AR', {maximumFractionDigits:0});
+function mastInternacional(){
+  const x = INTL || {};
+  const n = v => v == null ? '—' : nfE.format(v);
+  let fecha = '—';
+  if (x.datos_al){ const [y,m,d] = x.datos_al.split('-'); fecha = `${+d} ${MESES_C[+m-1]}`; }
+  const tipC = x.etfs != null ? ` title="Clases (ISIN) de fondos y ETFs. Además hay ${nfE.format(x.etfs)} ETFs."` : '';
+  return `<div><b class="num">${n(x.fondos)}</b><span>Fondos</span></div><div${tipC}><b class="num">${n(x.clases)}</b><span>Clases</span></div><div><b class="num">${n(x.gestoras)}</b><span>Gestoras</span></div><div title="Último día con datos en MKTSignals"><b>${fecha}</b><span>Valores al</span></div>`;
+}
+
 /* ================================================================ pestañas */
 const DISC = {
   ar: $('#discText') ? $('#discText').textContent : '',
-  int: 'Datos internacionales de MKTSignals (funds.mktsignals.org): valores liquidativos recopilados de fuentes públicas. Esta sección te lleva a su sitio; no copia sus datos. Información de carácter informativo; no constituye una recomendación de inversión.',
+  int: 'Datos internacionales de MKTSignals (funds.mktsignals.org): valores liquidativos recopilados de fuentes públicas. Esta sección te lleva a su sitio; no copia sus datos.',
 };
 function seccionDesdeHash(){ return location.hash === '#int' ? 'int' : 'ar'; }
 function irA(sec, push){
   const ar = sec !== 'int';
   $('#secAr').hidden = !ar; $('#secInt').hidden = ar;
   $('#tabAr').setAttribute('aria-selected', ar); $('#tabInt').setAttribute('aria-selected', !ar);
-  $('#mastMeta').hidden = !ar;
+  if (iniciado) $('#mastMeta').innerHTML = ar ? MAST_AR : MAST_INT;
   document.body.dataset.sec = ar ? 'ar' : 'int';
   if ($('#discText')) $('#discText').textContent = DISC[sec] || DISC.ar;
   document.title = ar ? 'Fichero de Fondos · Argentina' : 'Fichero de Fondos · Internacional';
