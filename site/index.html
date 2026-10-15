@@ -117,7 +117,7 @@
     <div>
       <div class="d-g">Fondos internacionales</div>
       <h2>Buscá cualquier fondo UCITS</h2>
-      <p class="sub" style="font-size:13.5px;max-width:64ch">Se abre en el screener de <b>MKTSignals</b>, con valor diario, rentabilidad, volatilidad, Sharpe, caída máxima, TER y SRRI de cada fondo. Configurando tu dispositivo (más abajo), lo ves con esta misma apariencia.</p>
+      <p class="sub" style="font-size:13.5px;max-width:64ch">Se abre en el screener de <b>MKTSignals</b>, con valor diario, rentabilidad, volatilidad, Sharpe, caída máxima, TER y SRRI de cada fondo. Con el favorito <b>Colores Fichero</b> (más abajo) lo ves con esta misma apariencia, en cualquier computadora y sin instalar nada.</p>
     </div>
   </div>
   <a class="int-feat" href="https://funds.mktsignals.org/screener?divisa=USD&amp;subtype=funds" target="_blank" rel="noopener">
@@ -147,7 +147,7 @@
     <div class="panel-h">
       <div>
         <h3>MKTSignals con los colores del Fichero</h3>
-        <p>Se configura una vez en cada dispositivo. Después MKTSignals se abre siempre con la apariencia del Fichero, sin tocar nada.</p>
+        <p>Sin descargar nada ni instalar extensiones: guardás el botón <b>Colores Fichero</b> como favorito y lo tocás cuando estás en MKTSignals. Se mantiene mientras navegás en esa pestaña.</p>
       </div>
       <div class="seg sm" role="group" aria-label="Dispositivo" id="estDisp">
         <button type="button" data-disp="pc" aria-pressed="true">Computadora</button>
@@ -158,59 +158,55 @@
 
     <div class="est-modo" data-disp="pc">
       <ol class="est-pasos">
-        <li>Instalá la extensión <a href="https://chromewebstore.google.com/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne" target="_blank" rel="noopener">Stylus</a> en Chrome o Edge (en Firefox, <a href="https://addons.mozilla.org/es-ES/firefox/addon/styl-us/" target="_blank" rel="noopener">esta</a>).</li>
-        <li>Abrí el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a> y tocá <b>Instalar estilo</b>.</li>
+        <li>Arrastrá este botón hasta la barra de favoritos: <a class="est-marcador" id="estLink" href="#" title="Arrastralo a la barra de favoritos"><svg width="15" height="15" viewBox="0 0 64 64" aria-hidden="true"><rect x="11" y="23" width="42" height="29" rx="4" fill="none" stroke="currentColor" stroke-width="6"/><rect x="24" y="32" width="16" height="6" rx="3" fill="#E3B45C"/></svg>Colores Fichero</a><br><span class="est-sub">Si no ves la barra, mostrala con <kbd>Ctrl</kbd> <kbd>Mayús</kbd> <kbd>B</kbd> (en Mac, <kbd>⌘</kbd> <kbd>Mayús</kbd> <kbd>B</kbd>).</span></li>
+        <li>Abrí MKTSignals desde el Fichero y hacé clic en <b>Colores Fichero</b>.</li>
       </ol>
-      <p class="est-nota">Con Chrome y tu cuenta de Google, Stylus se instala solo en tus otras computadoras. Para que también pase el estilo, activá en las opciones de Stylus la sincronización en la nube (Google Drive).</p>
+      <p class="est-nota">Sirve en Chrome, Edge, Firefox y Safari. En una computadora prestada, después podés borrar el favorito. ¿No se puede arrastrar? <button class="linkbtn est-copiar" type="button">Copiá el código</button> y pegalo como dirección de un favorito nuevo.</p>
       <details class="est-alt">
-        <summary>Sin instalar nada: marcador «Colores Fichero» (un clic por pestaña)</summary>
+        <summary>En tu computadora, automático sin hacer clic (con la extensión Stylus)</summary>
         <ol class="est-pasos">
-          <li>Mostrá la barra de favoritos (en Chrome: menú <b>⋮</b> › <b>Favoritos y listas</b> › <b>Mostrar barra de favoritos</b>).</li>
-          <li>Arrastrá este botón hasta la barra: <a class="est-marcador" id="estLink" href="#" title="Arrastralo a la barra de favoritos"><svg width="15" height="15" viewBox="0 0 64 64" aria-hidden="true"><rect x="11" y="23" width="42" height="29" rx="4" fill="none" stroke="currentColor" stroke-width="6"/><rect x="24" y="32" width="16" height="6" rx="3" fill="#E3B45C"/></svg>Colores Fichero</a></li>
-          <li>En la pestaña de MKTSignals, hacé clic en <b>Colores Fichero</b>. ¿No se puede arrastrar? <button class="linkbtn est-copiar" type="button">Copiá el código</button> y pegalo como dirección de un favorito nuevo.</li>
+          <li>Instalá la extensión <a href="https://chromewebstore.google.com/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne" target="_blank" rel="noopener">Stylus</a> en Chrome o Edge (en Firefox, <a href="https://addons.mozilla.org/es-ES/firefox/addon/styl-us/" target="_blank" rel="noopener">esta</a>).</li>
+          <li>Abrí el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a> y tocá <b>Instalar estilo</b>.</li>
         </ol>
       </details>
     </div>
 
     <div class="est-modo" data-disp="ios" hidden>
       <ol class="est-pasos">
-        <li>Instalá la app gratis <a href="https://apps.apple.com/app/id1463298887" target="_blank" rel="noopener">Userscripts</a> y abrila una vez. Si te pide una carpeta para los scripts, elegí cualquiera.</li>
-        <li>Activala en <b>Ajustes</b> › <b>Apps</b> › <b>Safari</b> › <b>Extensiones</b> › <b>Userscripts</b> (en iOS 17: <b>Ajustes</b> › <b>Safari</b> › <b>Extensiones</b>) y en «Otros sitios web» elegí <b>Permitir</b>.</li>
-        <li>En Safari, abrí el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.js" target="_blank" rel="noopener">script del Fichero</a>. Tocá el botón de extensiones en la barra de direcciones (<b>aA</b> o la pieza de rompecabezas) › <b>Userscripts</b> › <b>Instalar</b>.</li>
-        <li>Listo: en Safari, MKTSignals se abre con los colores del Fichero. En una Mac con Safari es igual.</li>
+        <li><button class="btn sm est-copiar" type="button">Copiar el código del marcador</button></li>
+        <li>En Safari, tocá <b>Compartir</b> › <b>Agregar marcador</b> y guardalo.</li>
+        <li>Abrí <b>Marcadores</b> (el ícono del libro) › <b>Editar</b> y tocá el marcador nuevo. Nombre: <b>Colores Fichero</b>. En la dirección, borrá lo que hay y pegá el código.</li>
+        <li>En la pestaña de MKTSignals, abrí <b>Marcadores</b> y tocá <b>Colores Fichero</b>.</li>
       </ol>
       <details class="est-alt">
-        <summary>Sin instalar nada: marcador «Colores Fichero» (un toque por pestaña)</summary>
+        <summary>Automático sin tocar nada (con la app gratis Userscripts)</summary>
         <ol class="est-pasos">
-          <li><button class="btn sm est-copiar" type="button">Copiar el código del marcador</button></li>
-          <li>En Safari, tocá <b>Compartir</b> › <b>Agregar marcador</b> y guardalo.</li>
-          <li>Abrí <b>Marcadores</b> (el ícono del libro) › <b>Editar</b> y tocá el marcador nuevo. Nombre: <b>Colores Fichero</b>. En la dirección, borrá lo que hay y pegá el código.</li>
-          <li>En la pestaña de MKTSignals, abrí <b>Marcadores</b> y tocá <b>Colores Fichero</b>.</li>
+          <li>Instalá la app <a href="https://apps.apple.com/app/id1463298887" target="_blank" rel="noopener">Userscripts</a> y abrila una vez. Si te pide una carpeta para los scripts, elegí cualquiera.</li>
+          <li>Activala en <b>Ajustes</b> › <b>Apps</b> › <b>Safari</b> › <b>Extensiones</b> › <b>Userscripts</b> (en iOS 17: <b>Ajustes</b> › <b>Safari</b> › <b>Extensiones</b>) y en «Otros sitios web» elegí <b>Permitir</b>.</li>
+          <li>En Safari, abrí el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.js" target="_blank" rel="noopener">script del Fichero</a>. Tocá el botón de extensiones en la barra de direcciones (<b>aA</b> o la pieza de rompecabezas) › <b>Userscripts</b> › <b>Instalar</b>.</li>
         </ol>
       </details>
     </div>
 
     <div class="est-modo" data-disp="and" hidden>
       <ol class="est-pasos">
-        <li>Instalá <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank" rel="noopener">Firefox</a> (gratis, Play Store).</li>
-        <li>En Firefox, abrí <a href="https://addons.mozilla.org/es-ES/android/addon/styl-us/" target="_blank" rel="noopener">Stylus</a> y tocá <b>Agregar a Firefox</b>.</li>
-        <li>Abrí en Firefox el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a> y tocá <b>Instalar estilo</b>.</li>
-        <li>Entrá al Fichero desde Firefox: MKTSignals se abre ahí con los colores del Fichero.</li>
+        <li><button class="btn sm est-copiar" type="button">Copiar el código del marcador</button></li>
+        <li>En Chrome, tocá <b>⋮</b> › la estrella para guardar esta página en favoritos, y después <b>Editar</b> en el aviso de abajo.</li>
+        <li>Nombre: <b>Colores Fichero</b>. En la URL, borrá lo que hay y pegá el código. Volvé atrás para guardar.</li>
+        <li>En la pestaña de MKTSignals, escribí <b>Colores Fichero</b> en la barra de direcciones y tocá la sugerencia con la estrella (desde la lista de favoritos no funciona).</li>
       </ol>
       <details class="est-alt">
-        <summary>Sin instalar nada (en Chrome): marcador «Colores Fichero» (un toque por pestaña)</summary>
+        <summary>Automático sin tocar nada (con Firefox y la extensión Stylus)</summary>
         <ol class="est-pasos">
-          <li><button class="btn sm est-copiar" type="button">Copiar el código del marcador</button></li>
-          <li>En Chrome, tocá <b>⋮</b> › la estrella para guardar esta página en favoritos, y después <b>Editar</b> en el aviso de abajo.</li>
-          <li>Nombre: <b>Colores Fichero</b>. En la URL, borrá lo que hay y pegá el código. Volvé atrás para guardar.</li>
-          <li>En la pestaña de MKTSignals, escribí <b>Colores Fichero</b> en la barra de direcciones y tocá la sugerencia con la estrella (desde la lista de favoritos no funciona).</li>
+          <li>Instalá <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank" rel="noopener">Firefox</a> y, desde Firefox, la extensión <a href="https://addons.mozilla.org/es-ES/android/addon/styl-us/" target="_blank" rel="noopener">Stylus</a>.</li>
+          <li>Abrí en Firefox el <a href="https://raw.githubusercontent.com/matepin/fichero-de-fondos/main/estilos/mktsignals-fichero.user.css" target="_blank" rel="noopener">estilo del Fichero</a> y tocá <b>Instalar estilo</b>. Entrá al Fichero desde Firefox.</li>
         </ol>
       </details>
     </div>
 
-    <div class="est-pie"><span id="estMsg" role="status"></span><button class="linkbtn" id="estListo" type="button">Ya lo configuré en este dispositivo</button></div>
+    <div class="est-pie"><span id="estMsg" role="status"></span><button class="linkbtn" id="estListo" type="button">Ya lo tengo en este dispositivo</button></div>
   </div>
-  <p class="int-estilo-min" id="intEstiloMin" hidden><span>MKTSignals con los colores del Fichero: configurado en este dispositivo.</span><button class="linkbtn" id="estVer" type="button">Configurar otro dispositivo</button></p>
+  <p class="int-estilo-min" id="intEstiloMin" hidden><span>Para ver MKTSignals con los colores del Fichero, tocá el favorito <b>Colores Fichero</b> en su pestaña.</span><button class="linkbtn" id="estVer" type="button">Cómo configurarlo</button></p>
 
   <h3 class="int-h3">Otros accesos</h3>
   <div class="int-grid" id="intGrid"></div>
@@ -228,7 +224,7 @@
 
   <section class="guide" aria-label="Sobre esta sección">
     <div><h4>De dónde salen los datos</h4><p>La información internacional es de MKTSignals (funds.mktsignals.org), que publica valores liquidativos recopilados de fuentes públicas. Esta sección solo te lleva a su sitio; no copia sus datos.</p></div>
-    <div><h4>Misma apariencia</h4><p>Se configura una vez por dispositivo desde el recuadro «MKTSignals con los colores del Fichero»: Stylus en computadoras y en Firefox para Android; la app Userscripts en Safari (iPhone, iPad y Mac). Sin instalar nada, está el marcador «Colores Fichero», que se toca en cada pestaña.</p></div>
+    <div><h4>Misma apariencia</h4><p>En cualquier computadora, sin descargar nada: arrastrá una vez el botón «Colores Fichero» a la barra de favoritos y hacé clic en él en la pestaña de MKTSignals. Si preferís que sea automático en tu propia computadora o celular, el mismo recuadro explica cómo hacerlo con Stylus o Userscripts.</p></div>
     <div><h4>Ir y volver</h4><p>MKTSignals se abre siempre en una pestaña nueva y el Fichero queda abierto en esta. Para volver, pasá a esta pestaña o cerrá la de MKTSignals.</p></div>
   </section>
 </section>
